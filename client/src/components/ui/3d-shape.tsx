@@ -690,3 +690,351 @@ const ParticleField = ({ count }: { count: number }) => {
     </group>
   );
 };
+
+// ============================================================================
+// INTERACTIVE MOUSE-REACTIVE PARTICLES
+// ============================================================================
+export const InteractiveParticles = () => {
+  return (
+    <Canvas
+      className="w-full h-full"
+      camera={{ position: [0, 0, 20], fov: 60 }}
+      style={{ position: 'absolute', top: 0, left: 0 }}
+    >
+      <ambientLight intensity={0.1} />
+      <pointLight position={[10, 10, 10]} intensity={0.5} color="#06b6d4" />
+      <pointLight position={[-10, -10, 10]} intensity={0.3} color="#a855f7" />
+      <Suspense fallback={null}>
+        <MouseParticleField />
+      </Suspense>
+    </Canvas>
+  );
+};
+
+const MouseParticleField = () => {
+  const { viewport, mouse } = useThree();
+  const groupRef = useRef<THREE.Group>(null);
+  const particlesRef = useRef<THREE.InstancedMesh>(null);
+  const mouseRef = useRef(new THREE.Vector3());
+
+  const count = 200;
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  const particles = useMemo(() => {
+    const temp = [];
+    for (let i = 0; i < count; i++) {
+      temp.push({
+        position: new THREE.Vector3(
+          (Math.random() - 0.5) * 25,
+          (Math.random() - 0.5) * 15,
+          (Math.random() - 0.5) * 10
+        ),
+        originalPosition: new THREE.Vector3(
+          (Math.random() - 0.5) * 25,
+          (Math.random() - 0.5) * 15,
+          (Math.random() - 0.5) * 10
+        ),
+        velocity: new THREE.Vector3(),
+        scale: 0.02 + Math.random() * 0.06,
+        color: Math.random(),
+      });
+    }
+    return temp;
+  }, []);
+
+  useFrame((state) => {
+    // Convert mouse to 3D world coordinates
+    mouseRef.current.set(
+      (mouse.x * viewport.width) / 2,
+      (mouse.y * viewport.height) / 2,
+      0
+    );
+
+    particles.forEach((particle, i) => {
+      // Calculate distance from mouse
+      const dx = particle.position.x - mouseRef.current.x;
+      const dy = particle.position.y - mouseRef.current.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // Repel particles from mouse
+      const force = Math.max(0, 1 - dist / 5);
+      if (dist < 5) {
+        particle.velocity.x += (dx / dist) * force * 0.1;
+        particle.velocity.y += (dy / dist) * force * 0.1;
+      }
+
+      // Return to original position
+      particle.velocity.x += (particle.originalPosition.x - particle.position.x) * 0.02;
+      particle.velocity.y += (particle.originalPosition.y - particle.position.y) * 0.02;
+      particle.velocity.z += (particle.originalPosition.z - particle.position.z) * 0.02;
+
+      // Apply velocity with damping
+      particle.velocity.multiplyScalar(0.9);
+      particle.position.add(particle.velocity);
+
+      // Subtle floating animation
+      particle.position.y += Math.sin(state.clock.elapsedTime * 0.5 + i * 0.1) * 0.002;
+
+      // Update instance matrix
+      dummy.position.copy(particle.position);
+      dummy.scale.setScalar(particle.scale * (1 + force * 2));
+      dummy.updateMatrix();
+
+      if (particlesRef.current) {
+        particlesRef.current.setMatrixAt(i, dummy.matrix);
+      }
+    });
+
+    if (particlesRef.current) {
+      particlesRef.current.instanceMatrix.needsUpdate = true;
+    }
+
+    // Slow rotation of entire field
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.02;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      <instancedMesh ref={particlesRef} args={[undefined, undefined, count]}>
+        <sphereGeometry args={[1, 8, 8]} />
+        <meshStandardMaterial
+          color="#06b6d4"
+          emissive="#06b6d4"
+          emissiveIntensity={0.8}
+          transparent
+          opacity={0.8}
+        />
+      </instancedMesh>
+
+      {/* Add some larger accent particles */}
+      {Array.from({ length: 20 }).map((_, i) => (
+        <Float key={i} speed={1 + Math.random()} rotationIntensity={0.2} floatIntensity={0.5}>
+          <mesh
+            position={[
+              (Math.random() - 0.5) * 20,
+              (Math.random() - 0.5) * 12,
+              (Math.random() - 0.5) * 8,
+            ]}
+          >
+            <icosahedronGeometry args={[0.1 + Math.random() * 0.1, 0]} />
+            <meshStandardMaterial
+              color={i % 2 === 0 ? "#a855f7" : "#22c55e"}
+              emissive={i % 2 === 0 ? "#a855f7" : "#22c55e"}
+              emissiveIntensity={0.6}
+              wireframe
+            />
+          </mesh>
+        </Float>
+      ))}
+    </group>
+  );
+};
+
+// ============================================================================
+// PULSING NEURAL NETWORK WITH ANIMATED CONNECTIONS
+// ============================================================================
+export const PulsingNeuralNetwork = () => {
+  return (
+    <Canvas className="w-full h-full" camera={{ position: [0, 0, 6] }}>
+      <ambientLight intensity={0.3} />
+      <pointLight position={[10, 10, 10]} intensity={1} color="#06b6d4" />
+      <pointLight position={[-10, -10, -10]} intensity={0.5} color="#a855f7" />
+      <Suspense fallback={null}>
+        <Float speed={0.5} rotationIntensity={0.2} floatIntensity={0.3}>
+          <PulsingNeuralMesh />
+        </Float>
+      </Suspense>
+    </Canvas>
+  );
+};
+
+const PulsingNeuralMesh = () => {
+  const groupRef = useRef<THREE.Group>(null);
+  const pulseRefs = useRef<THREE.Mesh[]>([]);
+
+  const nodes = useMemo(() => {
+    const points: { pos: THREE.Vector3; connections: number[] }[] = [];
+    for (let i = 0; i < 30; i++) {
+      points.push({
+        pos: new THREE.Vector3(
+          (Math.random() - 0.5) * 4,
+          (Math.random() - 0.5) * 4,
+          (Math.random() - 0.5) * 4
+        ),
+        connections: [],
+      });
+    }
+    // Create connections between nearby nodes
+    points.forEach((node, i) => {
+      points.forEach((other, j) => {
+        if (i !== j && node.pos.distanceTo(other.pos) < 1.8) {
+          node.connections.push(j);
+        }
+      });
+    });
+    return points;
+  }, []);
+
+  const pulses = useMemo(() => {
+    const temp: { start: number; end: number; progress: number; speed: number }[] = [];
+    nodes.forEach((node, i) => {
+      node.connections.forEach((j) => {
+        if (Math.random() > 0.5) {
+          temp.push({
+            start: i,
+            end: j,
+            progress: Math.random(),
+            speed: 0.3 + Math.random() * 0.4,
+          });
+        }
+      });
+    });
+    return temp;
+  }, [nodes]);
+
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.05;
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+    }
+
+    // Animate pulses
+    pulses.forEach((pulse, i) => {
+      pulse.progress += delta * pulse.speed;
+      if (pulse.progress > 1) pulse.progress = 0;
+
+      if (pulseRefs.current[i]) {
+        const startPos = nodes[pulse.start].pos;
+        const endPos = nodes[pulse.end].pos;
+        pulseRefs.current[i].position.lerpVectors(startPos, endPos, pulse.progress);
+
+        // Pulse glow effect
+        const material = pulseRefs.current[i].material as THREE.MeshStandardMaterial;
+        material.emissiveIntensity = 1 + Math.sin(pulse.progress * Math.PI) * 2;
+      }
+    });
+  });
+
+  return (
+    <group ref={groupRef}>
+      {/* Nodes */}
+      {nodes.map((node, i) => (
+        <mesh key={i} position={node.pos}>
+          <sphereGeometry args={[0.08 + Math.random() * 0.04, 16, 16]} />
+          <meshStandardMaterial
+            color="#06b6d4"
+            emissive="#06b6d4"
+            emissiveIntensity={0.5 + Math.sin(i) * 0.3}
+          />
+        </mesh>
+      ))}
+
+      {/* Connections */}
+      {nodes.map((node, i) =>
+        node.connections.map((j, k) => {
+          if (j > i) {
+            return (
+              <line key={`${i}-${j}`}>
+                <bufferGeometry>
+                  <bufferAttribute
+                    attach="attributes-position"
+                    count={2}
+                    array={new Float32Array([
+                      node.pos.x, node.pos.y, node.pos.z,
+                      nodes[j].pos.x, nodes[j].pos.y, nodes[j].pos.z,
+                    ])}
+                    itemSize={3}
+                  />
+                </bufferGeometry>
+                <lineBasicMaterial color="#06b6d4" transparent opacity={0.3} />
+              </line>
+            );
+          }
+          return null;
+        })
+      )}
+
+      {/* Animated Pulses */}
+      {pulses.map((pulse, i) => (
+        <mesh
+          key={i}
+          ref={(el) => { if (el) pulseRefs.current[i] = el; }}
+        >
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshStandardMaterial
+            color="#22c55e"
+            emissive="#22c55e"
+            emissiveIntensity={1}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
+// ============================================================================
+// MORPHING GEOMETRIC BACKGROUND
+// ============================================================================
+export const MorphingBackground = () => {
+  return (
+    <Canvas
+      className="w-full h-full"
+      camera={{ position: [0, 0, 5], fov: 60 }}
+      style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
+    >
+      <ambientLight intensity={0.2} />
+      <pointLight position={[5, 5, 5]} intensity={0.8} color="#06b6d4" />
+      <pointLight position={[-5, -5, 5]} intensity={0.4} color="#a855f7" />
+      <Suspense fallback={null}>
+        <MorphingMesh />
+      </Suspense>
+    </Canvas>
+  );
+};
+
+const MorphingMesh = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<any>(null);
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x = state.clock.elapsedTime * 0.1;
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.15;
+    }
+    if (materialRef.current) {
+      materialRef.current.distort = 0.3 + Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+    }
+  });
+
+  return (
+    <Float speed={0.5} rotationIntensity={0.1} floatIntensity={0.2}>
+      <mesh ref={meshRef} scale={3}>
+        <icosahedronGeometry args={[1, 4]} />
+        <MeshDistortMaterial
+          ref={materialRef}
+          color="#0a0a0f"
+          emissive="#06b6d4"
+          emissiveIntensity={0.05}
+          distort={0.3}
+          speed={1.5}
+          transparent
+          opacity={0.3}
+          wireframe
+        />
+      </mesh>
+      <mesh scale={2.5}>
+        <icosahedronGeometry args={[1, 2]} />
+        <meshStandardMaterial
+          color="#a855f7"
+          emissive="#a855f7"
+          emissiveIntensity={0.1}
+          transparent
+          opacity={0.1}
+          wireframe
+        />
+      </mesh>
+    </Float>
+  );
+};
