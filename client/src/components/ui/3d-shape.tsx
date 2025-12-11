@@ -723,23 +723,31 @@ const MouseParticleField = () => {
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
+      const x = (Math.random() - 0.5) * 25;
+      const y = (Math.random() - 0.5) * 15;
+      const z = (Math.random() - 0.5) * 10;
       temp.push({
-        position: new THREE.Vector3(
-          (Math.random() - 0.5) * 25,
-          (Math.random() - 0.5) * 15,
-          (Math.random() - 0.5) * 10
-        ),
-        originalPosition: new THREE.Vector3(
-          (Math.random() - 0.5) * 25,
-          (Math.random() - 0.5) * 15,
-          (Math.random() - 0.5) * 10
-        ),
+        position: new THREE.Vector3(x, y, z),
+        originalPosition: new THREE.Vector3(x, y, z),
         velocity: new THREE.Vector3(),
         scale: 0.02 + Math.random() * 0.06,
-        color: Math.random(),
       });
     }
     return temp;
+  }, []);
+
+  // Pre-compute accent particle positions
+  const accentParticles = useMemo(() => {
+    return Array.from({ length: 20 }).map((_, i) => ({
+      position: [
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 8,
+      ] as [number, number, number],
+      size: 0.1 + Math.random() * 0.1,
+      speed: 1 + Math.random(),
+      isEven: i % 2 === 0,
+    }));
   }, []);
 
   useFrame((state) => {
@@ -758,7 +766,7 @@ const MouseParticleField = () => {
 
       // Repel particles from mouse
       const force = Math.max(0, 1 - dist / 5);
-      if (dist < 5) {
+      if (dist < 5 && dist > 0) {
         particle.velocity.x += (dx / dist) * force * 0.1;
         particle.velocity.y += (dy / dist) * force * 0.1;
       }
@@ -809,19 +817,13 @@ const MouseParticleField = () => {
       </instancedMesh>
 
       {/* Add some larger accent particles */}
-      {Array.from({ length: 20 }).map((_, i) => (
-        <Float key={i} speed={1 + Math.random()} rotationIntensity={0.2} floatIntensity={0.5}>
-          <mesh
-            position={[
-              (Math.random() - 0.5) * 20,
-              (Math.random() - 0.5) * 12,
-              (Math.random() - 0.5) * 8,
-            ]}
-          >
-            <icosahedronGeometry args={[0.1 + Math.random() * 0.1, 0]} />
+      {accentParticles.map((particle, i) => (
+        <Float key={i} speed={particle.speed} rotationIntensity={0.2} floatIntensity={0.5}>
+          <mesh position={particle.position}>
+            <icosahedronGeometry args={[particle.size, 0]} />
             <meshStandardMaterial
-              color={i % 2 === 0 ? "#a855f7" : "#22c55e"}
-              emissive={i % 2 === 0 ? "#a855f7" : "#22c55e"}
+              color={particle.isEven ? "#a855f7" : "#22c55e"}
+              emissive={particle.isEven ? "#a855f7" : "#22c55e"}
               emissiveIntensity={0.6}
               wireframe
             />
