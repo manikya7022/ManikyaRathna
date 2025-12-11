@@ -717,7 +717,7 @@ const MouseParticleField = () => {
   const particlesRef = useRef<THREE.InstancedMesh>(null);
   const mouseRef = useRef(new THREE.Vector3());
 
-  const count = 200;
+  const count = 80;
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const particles = useMemo(() => {
@@ -738,7 +738,7 @@ const MouseParticleField = () => {
 
   // Pre-compute accent particle positions
   const accentParticles = useMemo(() => {
-    return Array.from({ length: 20 }).map((_, i) => ({
+    return Array.from({ length: 10 }).map((_, i) => ({
       position: [
         (Math.random() - 0.5) * 20,
         (Math.random() - 0.5) * 12,
