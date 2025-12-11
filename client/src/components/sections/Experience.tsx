@@ -1,152 +1,126 @@
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { Briefcase, Calendar, MapPin, Award } from "lucide-react";
-
-const experiences = [
-  {
-    role: "AI Engineer Intern",
-    company: "Northbridge",
-    location: "Pittsburgh, USA",
-    period: "Nov 2025 – Present",
-    desc: [
-      "Enhanced job-candidate matching accuracy by 35% using hybrid recommendation engine (AWS SageMaker, Collaborative Filtering).",
-      "Automated visa-sponsorship classification for 6,000+ postings with 73% accuracy via BERT fine-tuning.",
-      "Improved resume-to-job matching relevance by 28% using transformer-based extraction and OpenSearch."
-    ]
-  },
-  {
-    role: "NLP Software Developer",
-    company: "University of Pittsburgh",
-    location: "Pittsburgh, USA",
-    period: "Sept 2025 – Present",
-    desc: [
-      "Extracted clinical insights from 135M+ patient notes with 92% accuracy for tendinopathy cases using OHNLP.",
-      "Streamlined ETL pipelines reducing processing time by 65% for 6 EHR clinical domains.",
-      "Optimized query performance by 70% on 135M+ row database using advanced PostgreSQL indexing."
-    ]
-  },
-  {
-    role: "Fellowship",
-    company: "Premium Automation and Premium Labs",
-    location: "Pittsburgh, USA",
-    period: "Mar 2025 – May 2025",
-    desc: [
-      "Architected AI pipeline with LLMs (GPT, Gemini) and RAG for industrial market analysis, reducing manual effort by 70%.",
-      "Engineered scoring mechanism for stakeholder responses and market signals.",
-      "Built RAG-based NLP framework for semantic keyword identification."
-    ]
-  },
-  {
-    role: "Machine Learning Engineer",
-    company: "Tata Consultancy Services",
-    location: "Bangalore, India",
-    period: "Aug 2021 – Jul 2024",
-    desc: [
-      "Developed predictive models (XGBoost, Random Forest) for insurance premiums.",
-      "Managed scalable ETL pipelines in AWS Glue with PySpark.",
-      "Integrated Spark with NoSQL databases for large unstructured datasets.",
-      "Designed Flask-based RESTful APIs for ML model delivery."
-    ]
-  }
-];
+import { Terminal, Database, Cloud, Code2 } from "lucide-react";
 
 export default function Experience() {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
   return (
-    <section id="experience" className="py-24 relative">
-      <div className="container mx-auto px-4">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <h2 className="text-3xl md:text-5xl font-bold font-sans mb-4">
-            Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Journey</span>
-          </h2>
-          <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
-        </motion.div>
+    <section id="experience" className="py-24 bg-black relative overflow-hidden">
+      {/* Vertical Line for Timeline */}
+      <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 md:-translate-x-1/2" />
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/0 via-primary/50 to-primary/0 md:-translate-x-1/2 ml-6 md:ml-0" />
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="mb-20 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+              Execution Logs
+            </h2>
+        </div>
 
-          <div className="space-y-16">
-            {experiences.map((exp, index) => (
-              <ExperienceItem key={index} exp={exp} index={index} />
-            ))}
-          </div>
+        <div className="space-y-24">
+          {experiences.map((exp, i) => (
+            <TimelineItem key={i} exp={exp} index={i} />
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function ExperienceItem({ exp, index }: { exp: any; index: number }) {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-    rootMargin: "-50px"
-  });
-
+function TimelineItem({ exp, index }: { exp: any; index: number }) {
   const isLeft = index % 2 === 0;
 
   return (
-    <div
-      ref={ref}
-      className={`relative flex flex-col md:flex-row gap-8 ${
-        isLeft ? "md:flex-row-reverse" : ""
-      }`}
-    >
-      {/* Timeline Node */}
-      <div className="absolute left-6 md:left-1/2 top-0 w-4 h-4 rounded-full bg-black border-2 border-primary shadow-[0_0_10px_rgba(0,240,255,0.5)] md:-translate-x-1/2 z-10 mt-1.5 -ml-2 md:ml-0" />
+    <div className={`flex flex-col md:flex-row gap-8 items-center ${isLeft ? "md:flex-row-reverse" : ""}`}>
+      
+      {/* Center Point */}
+      <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-black border border-white/20 md:-translate-x-1/2 flex items-center justify-center z-10">
+        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+      </div>
 
-      {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, x: isLeft ? 50 : -50 }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="ml-12 md:ml-0 md:w-1/2"
-      >
-        <div className={`p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all duration-300 backdrop-blur-sm group ${
-          isLeft ? "md:mr-12" : "md:ml-12"
-        }`}>
-          <div className="flex flex-col gap-1 mb-4">
-            <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
-              {exp.role}
-            </h3>
-            <div className="flex items-center gap-2 text-secondary font-medium">
-              <Briefcase className="w-4 h-4" />
-              {exp.company}
-            </div>
-            <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mt-1 font-mono">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" /> {exp.period}
-              </span>
-              <span className="flex items-center gap-1">
-                <MapPin className="w-3 h-3" /> {exp.location}
-              </span>
-            </div>
+      {/* Content Side */}
+      <div className="ml-12 md:ml-0 md:w-1/2 w-full">
+        <motion.div
+          initial={{ opacity: 0, x: isLeft ? 20 : -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className={`p-6 rounded-xl border border-white/10 bg-neutral-900/50 backdrop-blur-sm hover:border-primary/50 transition-colors duration-300 relative group ${
+            isLeft ? "md:mr-12" : "md:ml-12"
+          }`}
+        >
+          {/* Decorative corners */}
+          <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+
+          <div className="flex items-center gap-2 mb-2">
+            <exp.icon className="w-4 h-4 text-primary" />
+            <span className="text-xs font-mono text-primary/80">{exp.period}</span>
           </div>
 
-          <ul className="space-y-2">
-            {exp.desc.map((item: string, i: number) => (
-              <li key={i} className="text-sm text-muted-foreground flex gap-2">
-                <span className="text-primary mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                <span className="leading-relaxed">{item}</span>
+          <h3 className="text-xl font-bold text-white mb-1">{exp.role}</h3>
+          <div className="text-neutral-400 text-sm font-medium mb-4 flex items-center gap-2">
+             <span className="w-1 h-1 rounded-full bg-neutral-600" />
+             {exp.company}
+          </div>
+
+          <ul className="space-y-3">
+            {exp.desc.map((item: string, idx: number) => (
+              <li key={idx} className="text-neutral-400 text-sm leading-relaxed flex items-start gap-2">
+                <span className="mt-1.5 text-primary/50 text-[10px]">➜</span>
+                {item}
               </li>
             ))}
           </ul>
-        </div>
-      </motion.div>
-      
-      {/* Empty space for the other side */}
+        </motion.div>
+      </div>
+
+      {/* Empty Side */}
       <div className="hidden md:block md:w-1/2" />
     </div>
   );
 }
+
+const experiences = [
+  {
+    role: "AI Engineer Intern",
+    company: "Northbridge",
+    period: "Nov 2025 – Present",
+    icon: Cloud,
+    desc: [
+      "Enhanced job-candidate matching by 35% using hybrid recommendation engine.",
+      "Automated visa-sponsorship classification for 6k+ postings with 73% accuracy.",
+      "Deployed serverless inference endpoints with Lambda and EFS."
+    ]
+  },
+  {
+    role: "NLP Software Developer",
+    company: "University of Pittsburgh",
+    period: "Sept 2025 – Present",
+    icon: Code2,
+    desc: [
+      "Extracted clinical insights from 135M+ patient notes with 92% accuracy.",
+      "Optimized query performance by 70% on 135M+ row database.",
+      "Streamlined ETL pipelines reducing processing time by 65%."
+    ]
+  },
+  {
+    role: "Fellowship",
+    company: "Premium Automation & Labs",
+    period: "Mar 2025 – May 2025",
+    icon: Terminal,
+    desc: [
+      "Architected AI pipeline with LLMs & RAG for industrial market analysis.",
+      "Engineered scoring mechanism for stakeholder responses.",
+      "Reduced manual research effort by 70%."
+    ]
+  },
+  {
+    role: "Machine Learning Engineer",
+    company: "Tata Consultancy Services",
+    period: "Aug 2021 – Jul 2024",
+    icon: Database,
+    desc: [
+      "Developed predictive models (XGBoost) for insurance premiums.",
+      "Managed scalable ETL pipelines in AWS Glue with PySpark.",
+      "Integrated Spark with NoSQL databases for large datasets."
+    ]
+  }
+];

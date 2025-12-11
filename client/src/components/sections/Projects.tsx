@@ -1,126 +1,83 @@
-import { Card3D, Card3DBody, Card3DItem } from "../ui/3d-card";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { ExternalLink, Github } from "lucide-react";
-import recImg from "@assets/generated_images/abstract_recommendation_engine_visualization.png";
+import React from "react";
+import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
+import { Brain, Database, ShieldCheck, Cpu, Network } from "lucide-react";
 import nlpImg from "@assets/generated_images/abstract_nlp_visualization.png";
-
-const projects = [
-  {
-    title: "Biomedical Knowledge Graph",
-    period: "Aug 2025 - Dec 2025",
-    description: "Constructed unified biomedical KG integrating multiple ontologies with Proof-Path Similarity Discovery to identify non-obvious relationships.",
-    tags: ["Graph DB", "Python", "Ontology", "AI"],
-    image: nlpImg,
-    links: { demo: "#", code: "#" }
-  },
-  {
-    title: "Uncertainty-Aware LLM Alignment",
-    period: "Jan 2025 - Apr 2025",
-    description: "Framework for LLM alignment using test-time reward ensembles and epistemic uncertainty quantification. Achieved superior performance on AlpacaEval 2.0.",
-    tags: ["LLM", "RLHF", "Llama3", "Python"],
-    image: recImg,
-    links: { demo: "#", code: "#" }
-  },
-  {
-    title: "Brain Machine Interface Control",
-    period: "Sept 2022 - Dec 2022",
-    description: "ML model for EEG-based wheelchair control enabling directional movement and communication via BCI. Published at ERCICA 2023.",
-    tags: ["BCI", "Machine Learning", "EEG", "Python"],
-    image: recImg, // Reusing for now as placeholder
-    links: { demo: "#", code: "#" }
-  }
-];
+import recImg from "@assets/generated_images/abstract_recommendation_engine_visualization.png";
 
 export default function Projects() {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
   return (
-    <section id="projects" className="py-24 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10" />
-
+    <section id="projects" className="py-20 bg-black relative z-20">
       <div className="container mx-auto px-4">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-5xl font-bold font-sans mb-4">
-            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Projects</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Showcasing innovation in AI, NLP, and Deep Learning.
-          </p>
-        </motion.div>
+         <div className="mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+              System Modules
+            </h2>
+            <p className="text-neutral-400 mt-2 max-w-lg">
+              Deployed architectures and intelligent pipelines.
+            </p>
+         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card3D className="h-full w-full" containerClassName="h-[450px] w-full">
-                <Card3DBody className="group/card relative w-full h-full rounded-xl p-0 border-white/10 bg-black/50 overflow-hidden">
-                  
-                  {/* Image Part */}
-                  <Card3DItem translateZ="50" className="w-full h-48 overflow-hidden rounded-t-xl">
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover/card:bg-black/0 transition-colors" />
-                  </Card3DItem>
-
-                  {/* Content Part */}
-                  <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
-                    <Card3DItem translateZ="30" className="flex justify-between items-start mb-2">
-                      <h3 className="text-xl font-bold text-white leading-tight group-hover/card:text-primary transition-colors">
-                        {project.title}
-                      </h3>
-                    </Card3DItem>
-                    
-                    <Card3DItem translateZ="20" as="p" className="text-xs text-muted-foreground font-mono mb-4">
-                      {project.period}
-                    </Card3DItem>
-                    
-                    <Card3DItem translateZ="40" as="p" className="text-sm text-gray-300 line-clamp-3 mb-4 flex-grow">
-                      {project.description}
-                    </Card3DItem>
-                    
-                    <Card3DItem translateZ="30" className="flex flex-wrap gap-2 mt-auto">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-white/5 border border-white/10 text-primary">
-                          {tag}
-                        </span>
-                      ))}
-                    </Card3DItem>
-                    
-                    {/* Hover Actions */}
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 translate-z-[60px]" style={{ transform: "translateZ(60px)" }}>
-                      <button className="p-2 rounded-full bg-black/50 backdrop-blur border border-white/20 hover:bg-white hover:text-black transition-colors">
-                        <Github className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 rounded-full bg-black/50 backdrop-blur border border-white/20 hover:bg-white hover:text-black transition-colors">
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </Card3DBody>
-              </Card3D>
-            </motion.div>
+        <BentoGrid className="max-w-7xl mx-auto">
+          {items.map((item, i) => (
+            <BentoGridItem
+              key={i}
+              title={item.title}
+              description={item.description}
+              header={item.header}
+              icon={item.icon}
+              className={i === 3 || i === 6 ? "md:col-span-2" : ""}
+            />
           ))}
-        </div>
+        </BentoGrid>
       </div>
     </section>
   );
 }
+
+const Skeleton = ({ img, className }: { img?: string, className?: string }) => (
+  <div className={`flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-900 to-neutral-800 border border-white/5 overflow-hidden relative ${className}`}>
+    {img && (
+      <img 
+        src={img} 
+        alt="project" 
+        className="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity hover:opacity-80 duration-500" 
+      />
+    )}
+    {!img && (
+      <div className="absolute inset-0 bg-dot-white/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]" />
+    )}
+  </div>
+);
+
+const items = [
+  {
+    title: "Biomedical Knowledge Graph",
+    description: "Unified KG integrating multiple ontologies with Proof-Path Similarity Discovery.",
+    header: <Skeleton img={nlpImg} />,
+    icon: <Network className="h-4 w-4 text-primary" />,
+  },
+  {
+    title: "Uncertainty-Aware Alignment",
+    description: "LLM alignment framework using test-time reward ensembles & epistemic uncertainty.",
+    header: <Skeleton img={recImg} />,
+    icon: <Brain className="h-4 w-4 text-secondary" />,
+  },
+  {
+    title: "Brain Machine Interface",
+    description: "EEG-based wheelchair control enabling directional movement via BCI.",
+    header: <Skeleton />,
+    icon: <Cpu className="h-4 w-4 text-green-500" />,
+  },
+  {
+    title: "Industrial RAG Pipeline",
+    description: "Architected end-to-end AI pipeline integrating GPT & Gemini for market analysis, reducing manual effort by 70%.",
+    header: <Skeleton className="bg-gradient-to-r from-primary/10 to-secondary/10" />,
+    icon: <Database className="h-4 w-4 text-blue-500" />,
+  },
+  {
+    title: "Visa Sponsorship Classifier",
+    description: "Automated classification for 6,000+ job postings with 73% accuracy using BERT.",
+    header: <Skeleton />,
+    icon: <ShieldCheck className="h-4 w-4 text-orange-500" />,
+  },
+];
