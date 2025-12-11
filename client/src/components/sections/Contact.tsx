@@ -1,83 +1,194 @@
 import { motion } from "framer-motion";
-import { Mail, Linkedin, Github, Send } from "lucide-react";
+import { Mail, Linkedin, Github, Send, MapPin, Phone, ArrowUpRight } from "lucide-react";
+import { ContactGlobe } from "../ui/3d-shape";
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-24 relative overflow-hidden bg-gradient-to-t from-black to-transparent">
+    <section id="contact" className="py-24 relative overflow-hidden bg-black">
+      {/* Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
+
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
-            {/* Glow Effect */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-bold font-sans">
-                  Let's <span className="text-primary">Connect</span>
-                </h2>
-                <p className="text-muted-foreground">
-                  I'm currently looking for new opportunities in AI/ML Engineering. 
-                  Whether you have a question or just want to say hi, I'll try my best to get back to you!
-                </p>
-                
-                <div className="space-y-4 pt-4">
-                  <ContactItem icon={Mail} text="mar805@pitt.edu" href="mailto:mar805@pitt.edu" />
-                  <ContactItem icon={Linkedin} text="LinkedIn Profile" href="#" />
-                  <ContactItem icon={Github} text="GitHub Profile" href="#" />
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 mb-4">
+              Let's Connect
+            </h2>
+            <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
+              I'm currently looking for new opportunities in AI/ML Engineering.
+              Whether you have a question or just want to say hi, I'll try my best to get back to you!
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - 3D Globe & Contact Info */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
+              {/* 3D Globe */}
+              <div className="h-64 md:h-80 w-full rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-neutral-900/50 to-neutral-900/20 backdrop-blur-xl relative">
+                <ContactGlobe />
+                {/* Overlay Text */}
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm text-neutral-400">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    Pittsburgh, PA
+                  </div>
+                  <div className="text-xs text-neutral-500 font-mono">
+                    Open to Remote & Relocation
+                  </div>
                 </div>
               </div>
-              
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-muted-foreground">Your Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all"
-                    placeholder="john@example.com"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-muted-foreground">Message</label>
-                  <textarea 
-                    id="message" 
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all resize-none"
-                    placeholder="Hello, I'd like to discuss..."
-                  />
-                </div>
-                
-                <button 
-                  type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-primary to-secondary text-black font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 group"
-                >
-                  Send Message
-                  <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </form>
-            </div>
+
+              {/* Contact Links */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <ContactCard
+                  icon={Mail}
+                  label="Email"
+                  value="mar805@pitt.edu"
+                  href="mailto:mar805@pitt.edu"
+                  color="#06b6d4"
+                />
+                <ContactCard
+                  icon={Linkedin}
+                  label="LinkedIn"
+                  value="Connect"
+                  href="https://linkedin.com"
+                  color="#0077b5"
+                />
+                <ContactCard
+                  icon={Github}
+                  label="GitHub"
+                  value="View Code"
+                  href="https://github.com"
+                  color="#ffffff"
+                />
+              </div>
+            </motion.div>
+
+            {/* Right Side - Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative overflow-hidden group">
+                {/* Glow Effect */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none group-hover:bg-primary/20 transition-colors duration-500" />
+
+                <h3 className="text-2xl font-bold text-white mb-6 relative z-10">
+                  Send a Message
+                </h3>
+
+                <form className="space-y-5 relative z-10" onSubmit={(e) => e.preventDefault()}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium text-neutral-400">Your Name</label>
+                      <input
+                        type="text"
+                        id="name"
+                        className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-white placeholder:text-neutral-600"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium text-neutral-400">Your Email</label>
+                      <input
+                        type="email"
+                        id="email"
+                        className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-white placeholder:text-neutral-600"
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="text-sm font-medium text-neutral-400">Subject</label>
+                    <input
+                      type="text"
+                      id="subject"
+                      className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-white placeholder:text-neutral-600"
+                      placeholder="Let's collaborate on..."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium text-neutral-400">Message</label>
+                    <textarea
+                      id="message"
+                      rows={4}
+                      className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none text-white placeholder:text-neutral-600"
+                      placeholder="Hello, I'd like to discuss..."
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-4 bg-gradient-to-r from-primary to-secondary text-black font-bold rounded-xl hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-lg shadow-primary/20 hover:shadow-primary/40"
+                  >
+                    Send Message
+                    <Send className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                  </button>
+                </form>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
-      
-      <div className="text-center mt-16 text-muted-foreground text-sm">
-        <p>© 2025 Manikya Rathna. Built with React & Tailwind.</p>
+
+      {/* Footer */}
+      <div className="text-center mt-20 pt-8 border-t border-white/5">
+        <p className="text-neutral-500 text-sm">
+          © 2025 Manikya Rathna. Crafted with <span className="text-primary">React</span>, <span className="text-secondary">Three.js</span> & <span className="text-white">Tailwind</span>.
+        </p>
       </div>
     </section>
   );
 }
 
-function ContactItem({ icon: Icon, text, href }: { icon: any; text: string; href: string }) {
+function ContactCard({
+  icon: Icon,
+  label,
+  value,
+  href,
+  color
+}: {
+  icon: any;
+  label: string;
+  value: string;
+  href: string;
+  color: string;
+}) {
   return (
-    <a 
-      href={href} 
-      className="flex items-center gap-3 text-white hover:text-primary transition-colors group p-3 rounded-lg hover:bg-white/5 w-fit"
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 group hover:bg-white/10"
     >
-      <div className="p-2 rounded-full bg-white/10 group-hover:bg-primary/20 transition-colors">
-        <Icon className="w-5 h-5" />
+      <div
+        className="p-3 rounded-lg transition-all duration-300 group-hover:scale-110"
+        style={{ backgroundColor: `${color}15` }}
+      >
+        <Icon className="w-5 h-5" style={{ color }} />
       </div>
-      <span className="font-medium">{text}</span>
+      <div className="flex-1">
+        <div className="text-xs text-neutral-500 uppercase tracking-wider">{label}</div>
+        <div className="text-sm text-white font-medium group-hover:text-primary transition-colors">{value}</div>
+      </div>
+      <ArrowUpRight className="w-4 h-4 text-neutral-500 group-hover:text-primary transition-colors" />
     </a>
   );
 }

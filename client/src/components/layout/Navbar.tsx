@@ -44,7 +44,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 md:px-6">
         <div
           className={cn(
-            "flex items-center justify-between rounded-full px-6 py-3 transition-all duration-300",
+            "flex items-center justify-between rounded-full px-6 py-3 transition-all duration-300 max-w-5xl mx-auto",
             scrolled
               ? "bg-black/60 backdrop-blur-md border border-white/10 shadow-lg shadow-primary/5"
               : "bg-transparent border-transparent"
@@ -61,13 +61,13 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center justify-center gap-2">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => scrollToSection(e, link.href)}
-                className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors rounded-full group overflow-hidden"
+                className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors rounded-full group overflow-hidden whitespace-nowrap"
               >
                 <span className="relative z-10">{link.name}</span>
                 <span className="absolute inset-0 bg-primary/10 scale-0 group-hover:scale-100 transition-transform rounded-full origin-center" />
