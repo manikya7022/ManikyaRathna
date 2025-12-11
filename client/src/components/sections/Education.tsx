@@ -1,7 +1,7 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { GraduationCap, Calendar, Award } from "lucide-react";
 import { Meteors } from "../ui/meteors";
+import { AbstractShape } from "../ui/3d-shape";
 
 export default function Education() {
   return (
@@ -18,14 +18,19 @@ export default function Education() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {education.map((edu, index) => (
-            <div key={index} className="relative w-full">
+            <div key={index} className="relative w-full group">
               <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] bg-red-500 rounded-full blur-3xl opacity-20" />
-              <div className="relative shadow-xl bg-gray-900 border border-gray-800  px-8 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
+              <div className="relative shadow-xl bg-gray-900 border border-gray-800 px-8 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start transition-all duration-300 hover:scale-[1.02]">
                 
+                {/* 3D Shape Floating in Background */}
+                <div className="absolute -right-10 -top-10 w-40 h-40 opacity-30 pointer-events-none">
+                  <AbstractShape color={index === 0 ? "#22d3ee" : "#818cf8"} />
+                </div>
+
                 {/* Meteor Effect */}
                 <Meteors number={20} />
 
-                <div className="flex justify-between items-start w-full mb-4 relative z-50">
+                <div className="flex justify-between items-start w-full mb-4 relative z-10">
                   <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-cyan-400">
                     <GraduationCap className="w-8 h-8" />
                   </div>
@@ -35,19 +40,19 @@ export default function Education() {
                   </div>
                 </div>
 
-                <h3 className="font-bold text-2xl text-white mb-2 relative z-50">
+                <h3 className="font-bold text-2xl text-white mb-2 relative z-10">
                   {edu.degree}
                 </h3>
-                <p className="font-medium text-neutral-300 mb-4 relative z-50">
+                <p className="font-medium text-neutral-300 mb-4 relative z-10">
                   {edu.school}
                 </p>
 
-                <div className="flex items-center gap-2 text-sm text-cyan-300 mb-6 bg-cyan-900/20 w-fit px-3 py-1 rounded-full border border-cyan-500/20 relative z-50">
+                <div className="flex items-center gap-2 text-sm text-cyan-300 mb-6 bg-cyan-900/20 w-fit px-3 py-1 rounded-full border border-cyan-500/20 relative z-10">
                   <Award className="w-4 h-4" />
                   GPA: {edu.gpa}
                 </div>
 
-                <div className="space-y-2 relative z-50">
+                <div className="space-y-2 relative z-10">
                   {edu.details.map((detail, i) => (
                     <div key={i} className="text-sm text-neutral-400 flex items-start gap-2">
                       <span className="mt-1.5 w-1 h-1 rounded-full bg-neutral-500" />

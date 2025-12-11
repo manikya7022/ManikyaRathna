@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Terminal, Database, Cloud, Code2 } from "lucide-react";
 import { TracingBeam } from "../ui/tracing-beam";
+import { AbstractShape } from "../ui/3d-shape";
 
 export default function Experience() {
   return (
@@ -9,7 +10,7 @@ export default function Experience() {
       {/* Header */}
       <div className="container mx-auto px-4 mb-16 text-center relative z-10">
         <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-          Execution Logs
+          Work Experience
         </h2>
         <p className="text-neutral-400 mt-4">
           Tracing the runtime history of professional engagements.
@@ -19,12 +20,18 @@ export default function Experience() {
       <TracingBeam className="px-6">
         <div className="max-w-2xl mx-auto antialiased pt-4 relative">
           {experiences.map((item, index) => (
-            <div key={`content-${index}`} className="mb-10">
-              <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-4 border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+            <div key={`content-${index}`} className="mb-14 relative group">
+              
+              {/* Floating 3D Element for each block */}
+              <div className="absolute -left-16 top-10 w-12 h-12 hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                 <AbstractShape color="#06b6d4" />
+              </div>
+
+              <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-4 border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)] relative z-10">
                 {item.company}
               </h2>
 
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-neutral-900/90 to-neutral-900/50 border border-white/10 backdrop-blur-sm hover:border-cyan-500/30 transition-colors group">
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-neutral-900/90 to-neutral-900/50 border border-white/10 backdrop-blur-sm hover:border-cyan-500/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)]">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 group-hover:scale-110 transition-transform">
                     <item.icon className="w-5 h-5" />
@@ -38,7 +45,7 @@ export default function Experience() {
                 <ul className="space-y-3">
                   {item.desc.map((desc, i) => (
                     <li key={i} className="text-sm text-neutral-300 flex items-start gap-3">
-                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)] flex-shrink-0" />
                       {desc}
                     </li>
                   ))}
@@ -96,5 +103,5 @@ const experiences = [
       "Managed scalable ETL pipelines in AWS Glue with PySpark.",
       "Integrated Spark with NoSQL databases for large datasets."
     ]
-  }
-];
+  ]
+};
