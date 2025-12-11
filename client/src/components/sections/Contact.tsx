@@ -1,8 +1,26 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Mail, Linkedin, Github, Send, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import { ContactGlobe } from "../ui/3d-shape";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const mailtoLink = `mailto:mar805@pitt.edu?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
+    window.location.href = mailtoLink;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
   return (
     <section id="contact" className="py-24 relative overflow-hidden bg-black">
       {/* Gradient Background */}
@@ -64,14 +82,14 @@ export default function Contact() {
                   icon={Linkedin}
                   label="LinkedIn"
                   value="Connect"
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/manikya-rathna-098263196/"
                   color="#0077b5"
                 />
                 <ContactCard
                   icon={Github}
                   label="GitHub"
                   value="View Code"
-                  href="https://github.com"
+                  href="https://github.com/manikya7022"
                   color="#ffffff"
                 />
               </div>
@@ -92,13 +110,15 @@ export default function Contact() {
                   Send a Message
                 </h3>
 
-                <form className="space-y-5 relative z-10" onSubmit={(e) => e.preventDefault()}>
+                <form className="space-y-5 relative z-10" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label htmlFor="name" className="text-sm font-medium text-neutral-400">Your Name</label>
                       <input
                         type="text"
                         id="name"
+                        value={formData.name}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-white placeholder:text-neutral-600"
                         placeholder="John Doe"
                       />
@@ -108,6 +128,8 @@ export default function Contact() {
                       <input
                         type="email"
                         id="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-white placeholder:text-neutral-600"
                         placeholder="john@example.com"
                       />
@@ -119,6 +141,8 @@ export default function Contact() {
                     <input
                       type="text"
                       id="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-white placeholder:text-neutral-600"
                       placeholder="Let's collaborate on..."
                     />
@@ -129,6 +153,8 @@ export default function Contact() {
                     <textarea
                       id="message"
                       rows={4}
+                      value={formData.message}
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none text-white placeholder:text-neutral-600"
                       placeholder="Hello, I'd like to discuss..."
                     />
@@ -184,9 +210,9 @@ function ContactCard({
       >
         <Icon className="w-5 h-5" style={{ color }} />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <div className="text-xs text-neutral-500 uppercase tracking-wider">{label}</div>
-        <div className="text-sm text-white font-medium group-hover:text-primary transition-colors">{value}</div>
+        <div className="text-sm text-white font-medium group-hover:text-primary transition-colors truncate">{value}</div>
       </div>
       <ArrowUpRight className="w-4 h-4 text-neutral-500 group-hover:text-primary transition-colors" />
     </a>
