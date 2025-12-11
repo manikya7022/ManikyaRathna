@@ -2,6 +2,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Spotlight } from "@/components/ui/spotlight";
 import StarsCanvas from "@/components/ui/stars-background";
 import { HeroTechCore } from "@/components/ui/3d-shape";
+import MagneticButton from "@/components/ui/MagneticButton";
+import TextReveal from "@/components/ui/TextReveal";
 import { ArrowDown, Sparkles } from "lucide-react";
 
 export default function Hero() {
@@ -76,16 +78,12 @@ export default function Hero() {
           </motion.h1>
 
           {/* Animated Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-neutral-400 font-light mb-8 leading-relaxed"
-          >
-            Building <span className="text-primary font-medium">intelligent systems</span> at the intersection of
-            <br className="hidden md:block" />
-            machine learning, NLP, and human-centered AI.
-          </motion.p>
+          {/* Animated Subtitle */}
+          <div className="mb-8">
+            <TextReveal className="text-xl md:text-2xl text-neutral-400 font-light leading-relaxed">
+              Building intelligent systems at the intersection of machine learning, NLP, and human-centered AI.
+            </TextReveal>
+          </div>
 
           {/* Bio Card with Glassmorphism */}
           <motion.div
@@ -129,21 +127,23 @@ export default function Hero() {
           </motion.div>
 
           {/* Scroll Indicator */}
-          <motion.button
-            onClick={scrollToAbout}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 hover:text-primary transition-colors cursor-pointer group"
-          >
-            <span className="text-xs uppercase tracking-widest">Explore</span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+          <MagneticButton className="absolute bottom-12 left-1/2 -translate-x-1/2">
+            <motion.button
+              onClick={scrollToAbout}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.2 }}
+              className="flex flex-col items-center gap-2 text-neutral-500 hover:text-primary transition-colors cursor-pointer group"
             >
-              <ArrowDown className="w-5 h-5" />
-            </motion.div>
-          </motion.button>
+              <span className="text-xs uppercase tracking-widest">Explore</span>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ArrowDown className="w-5 h-5" />
+              </motion.div>
+            </motion.button>
+          </MagneticButton>
         </div>
       </motion.div>
     </div>
