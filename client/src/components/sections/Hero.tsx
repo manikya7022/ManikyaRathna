@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Spotlight } from "@/components/ui/spotlight";
 import StarsCanvas from "@/components/ui/stars-background";
-import { HeroTechCore, InteractiveParticles } from "@/components/ui/3d-shape";
+import { HeroTechCore } from "@/components/ui/3d-shape";
 import { ArrowDown, Sparkles } from "lucide-react";
 
 export default function Hero() {
@@ -17,13 +17,8 @@ export default function Hero() {
       {/* Dynamic 3D Stars */}
       <StarsCanvas />
 
-      {/* Interactive Mouse Particles - Full screen */}
-      <div className="absolute inset-0 z-5">
-        <InteractiveParticles />
-      </div>
-
       {/* 3D Tech Core - Right Side */}
-      <div className="absolute inset-0 z-5 pointer-events-none">
+      <div className="absolute inset-0 z-5">
         <HeroTechCore />
       </div>
 
