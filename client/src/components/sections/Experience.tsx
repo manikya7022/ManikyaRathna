@@ -103,5 +103,5 @@ const experiences = [
       "Managed scalable ETL pipelines in AWS Glue with PySpark.",
       "Integrated Spark with NoSQL databases for large datasets."
     ]
-  ]
-};
+  }
+];
