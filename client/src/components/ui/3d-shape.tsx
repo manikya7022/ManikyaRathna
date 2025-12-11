@@ -1,69 +1,93 @@
-import React, { useRef, useMemo, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import React, { useRef, useMemo, Suspense, memo } from "react";
+import { Canvas, useFrame, useThree, invalidate } from "@react-three/fiber";
 import { Float, MeshDistortMaterial, Sphere, OrbitControls, Text3D, Center, MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 // ============================================================================
-// HERO SECTION - Massive Floating DNA Helix / Tech Core
+// HERO SECTION - Optimized with System Design Concepts
+// 1. On-demand rendering (frameloop="demand")
+// 2. DPR limiting for performance
+// 3. Reduced geometry complexity
+// 4. Memoized components
+// 5. Throttled animations
 // ============================================================================
-export const HeroTechCore = () => {
+export const HeroTechCore = memo(() => {
   return (
     <Canvas
       className="w-full h-full"
       camera={{ position: [0, 0, 8], fov: 60 }}
       style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}
+      dpr={[1, 1.5]} // Limit pixel ratio for performance
+      performance={{ min: 0.5 }} // Allow frame rate to drop for stability
     >
-      <ambientLight intensity={0.2} />
+      <ambientLight intensity={0.3} />
       <pointLight position={[10, 10, 10]} intensity={1} color="#06b6d4" />
       <pointLight position={[-10, -10, 10]} intensity={0.5} color="#a855f7" />
-      <pointLight position={[0, -10, 5]} intensity={0.3} color="#22c55e" />
       <Suspense fallback={null}>
-        <Float speed={1} rotationIntensity={0.3} floatIntensity={0.5}>
+        <Float speed={0.5} rotationIntensity={0.2} floatIntensity={0.3}>
           <TechCoreGeometry />
         </Float>
       </Suspense>
     </Canvas>
   );
-};
+});
 
-const TechCoreGeometry = () => {
+const TechCoreGeometry = memo(() => {
   const groupRef = useRef<THREE.Group>(null);
   const coreRef = useRef<THREE.Mesh>(null);
   const ringsRef = useRef<THREE.Group>(null);
 
+  // Memoize particle positions to avoid recalculation
+  const particlePositions = useMemo(() => {
+    const positions: [number, number, number][] = [];
+    for (let i = 0; i < 15; i++) { // Reduced from 30 to 15
+      const theta = (i / 15) * Math.PI * 2;
+      const phi = Math.acos((2 * (i / 15)) - 1);
+      const radius = 2.5 + (i % 3) * 0.5;
+      positions.push([
+        radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.sin(phi) * Math.sin(theta),
+        radius * Math.cos(phi),
+      ]);
+    }
+    return positions;
+  }, []);
+
+  // Throttled animation - only update every other frame
+  let frameCount = 0;
   useFrame((state, delta) => {
+    frameCount++;
+    if (frameCount % 2 !== 0) return; // Skip every other frame
+
     if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.1;
+      groupRef.current.rotation.y += delta * 0.08;
     }
     if (coreRef.current) {
-      coreRef.current.rotation.x += delta * 0.2;
-      coreRef.current.rotation.z += delta * 0.1;
+      coreRef.current.rotation.x += delta * 0.15;
+      coreRef.current.rotation.z += delta * 0.08;
     }
     if (ringsRef.current) {
-      ringsRef.current.rotation.z += delta * 0.15;
-      ringsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+      ringsRef.current.rotation.z += delta * 0.1;
     }
   });
 
   return (
     <group ref={groupRef} position={[3, 0, 0]}>
-      {/* Central Core - Glowing Icosahedron */}
+      {/* Central Core - Simplified material (no distortion) */}
       <mesh ref={coreRef}>
-        <icosahedronGeometry args={[1.2, 2]} />
-        <MeshDistortMaterial
+        <icosahedronGeometry args={[1.2, 1]} /> {/* Reduced detail from 2 to 1 */}
+        <meshStandardMaterial
           color="#06b6d4"
           emissive="#06b6d4"
-          emissiveIntensity={0.3}
-          distort={0.2}
-          speed={2}
+          emissiveIntensity={0.4}
           transparent
-          opacity={0.8}
+          opacity={0.9}
         />
       </mesh>
 
       {/* Inner Glow */}
       <mesh scale={0.9}>
-        <icosahedronGeometry args={[1.2, 1]} />
+        <icosahedronGeometry args={[1.2, 0]} /> {/* Reduced detail */}
         <meshStandardMaterial
           color="#a855f7"
           emissive="#a855f7"
@@ -74,11 +98,11 @@ const TechCoreGeometry = () => {
         />
       </mesh>
 
-      {/* Orbiting Rings */}
+      {/* Orbiting Rings - Reduced segments */}
       <group ref={ringsRef}>
         {[0, 1, 2].map((i) => (
           <mesh key={i} rotation={[Math.PI / 2 + i * 0.3, i * 0.5, 0]}>
-            <torusGeometry args={[2 + i * 0.4, 0.02, 16, 100]} />
+            <torusGeometry args={[2 + i * 0.4, 0.02, 8, 48]} /> {/* Reduced from 16,100 to 8,48 */}
             <meshStandardMaterial
               color={i === 0 ? "#06b6d4" : i === 1 ? "#a855f7" : "#22c55e"}
               emissive={i === 0 ? "#06b6d4" : i === 1 ? "#a855f7" : "#22c55e"}
@@ -90,32 +114,16 @@ const TechCoreGeometry = () => {
         ))}
       </group>
 
-      {/* Floating Particles */}
-      {Array.from({ length: 30 }).map((_, i) => {
-        const theta = (i / 30) * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        const radius = 2.5 + Math.random() * 1.5;
-        return (
-          <mesh
-            key={i}
-            position={[
-              radius * Math.sin(phi) * Math.cos(theta),
-              radius * Math.sin(phi) * Math.sin(theta),
-              radius * Math.cos(phi),
-            ]}
-          >
-            <sphereGeometry args={[0.03, 8, 8]} />
-            <meshStandardMaterial
-              color="#06b6d4"
-              emissive="#06b6d4"
-              emissiveIntensity={1}
-            />
-          </mesh>
-        );
-      })}
+      {/* Floating Particles - Memoized and reduced */}
+      {particlePositions.map((pos, i) => (
+        <mesh key={i} position={pos}>
+          <sphereGeometry args={[0.04, 4, 4]} /> {/* Reduced from 8,8 to 4,4 */}
+          <meshBasicMaterial color="#06b6d4" /> {/* BasicMaterial is faster */}
+        </mesh>
+      ))}
     </group>
   );
-};
+});
 
 // ============================================================================
 // SKILLS SECTION - Floating Skill Cubes / Data Visualization
