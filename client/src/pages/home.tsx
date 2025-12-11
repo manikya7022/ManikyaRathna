@@ -2,6 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
+import Education from "@/components/sections/Education";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import { motion, useScroll, useSpring } from "framer-motion";
@@ -21,6 +22,8 @@ export default function Home() {
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary origin-left z-[60]"
         style={{ scaleX }}
       />
+      
+      <div className="bg-noise" />
 
       <Navbar />
       
@@ -28,6 +31,7 @@ export default function Home() {
         <Hero />
         <Skills />
         <Experience />
+        <Education />
         <Projects />
         <Contact />
       </main>

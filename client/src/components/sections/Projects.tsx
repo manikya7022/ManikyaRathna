@@ -10,7 +10,7 @@ export default function Projects() {
       <div className="container mx-auto px-4">
          <div className="mb-12">
             <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-              System Modules
+              Personal Projects
             </h2>
             <p className="text-neutral-400 mt-2 max-w-lg">
               Deployed architectures and intelligent pipelines.
@@ -40,7 +40,7 @@ const Skeleton = ({ img, className }: { img?: string, className?: string }) => (
       <img 
         src={img} 
         alt="project" 
-        className="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity hover:opacity-80 duration-500" 
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-opacity hover:opacity-100 duration-500" 
       />
     )}
     {!img && (
