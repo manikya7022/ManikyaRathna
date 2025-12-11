@@ -1,6 +1,6 @@
 import React from "react";
 import { BentoGrid } from "../ui/bento-grid";
-import { Brain, Database, ShieldCheck, Cpu, Network, ArrowUpRight } from "lucide-react";
+import { Brain, Cpu, Network, ArrowUpRight } from "lucide-react";
 import { Card3D, Card3DBody, Card3DItem } from "../ui/3d-card";
 import nlpImg from "@assets/generated_images/abstract_nlp_visualization.png";
 import recImg from "@assets/generated_images/abstract_recommendation_engine_visualization.png";
@@ -79,15 +79,6 @@ const ProjectImage = ({ img }: { img: string }) => (
   </div>
 );
 
-const ProjectPlaceholder = ({ gradient }: { gradient: string }) => (
-  <div className={`w-full h-40 rounded-xl overflow-hidden relative border border-white/5 bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-     <div className="absolute inset-0 bg-grid-white/[0.1]" />
-     <div className="w-16 h-16 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center border border-white/10">
-        <Cpu className="w-8 h-8 text-white/50" />
-     </div>
-  </div>
-);
-
 const items = [
   {
     title: "Biomedical Knowledge Graph",
@@ -106,22 +97,8 @@ const items = [
   {
     title: "Brain Machine Interface",
     description: "EEG-based wheelchair control enabling directional movement via BCI.",
-    header: <ProjectImage img={heroImg} />, // Reusing hero image for BCI to ensure it loads
+    header: <ProjectImage img={heroImg} />, 
     icon: <Cpu className="h-4 w-4" />,
-    className: "md:col-span-1"
-  },
-  {
-    title: "Industrial RAG Pipeline",
-    description: "Architected end-to-end AI pipeline integrating GPT & Gemini for market analysis, reducing manual effort by 70%.",
-    header: <ProjectPlaceholder gradient="from-blue-500/20 to-purple-500/20" />,
-    icon: <Database className="h-4 w-4" />,
-    className: "md:col-span-2"
-  },
-  {
-    title: "Visa Sponsorship Classifier",
-    description: "Automated classification for 6,000+ job postings with 73% accuracy using BERT.",
-    header: <ProjectPlaceholder gradient="from-orange-500/20 to-red-500/20" />,
-    icon: <ShieldCheck className="h-4 w-4" />,
     className: "md:col-span-1"
   },
 ];

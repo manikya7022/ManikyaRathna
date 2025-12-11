@@ -1,80 +1,54 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { Terminal, Database, Cloud, Code2 } from "lucide-react";
+import { TracingBeam } from "../ui/tracing-beam";
 
 export default function Experience() {
   return (
     <section id="experience" className="py-24 bg-black relative overflow-hidden">
-      {/* Vertical Line for Timeline */}
-      <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 md:-translate-x-1/2" />
+      {/* Header */}
+      <div className="container mx-auto px-4 mb-16 text-center relative z-10">
+        <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+          Execution Logs
+        </h2>
+        <p className="text-neutral-400 mt-4">
+          Tracing the runtime history of professional engagements.
+        </p>
+      </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="mb-20 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-              Execution Logs
-            </h2>
-        </div>
+      <TracingBeam className="px-6">
+        <div className="max-w-2xl mx-auto antialiased pt-4 relative">
+          {experiences.map((item, index) => (
+            <div key={`content-${index}`} className="mb-10">
+              <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-4 border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+                {item.company}
+              </h2>
 
-        <div className="space-y-24">
-          {experiences.map((exp, i) => (
-            <TimelineItem key={i} exp={exp} index={i} />
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-neutral-900/90 to-neutral-900/50 border border-white/10 backdrop-blur-sm hover:border-cyan-500/30 transition-colors group">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 group-hover:scale-110 transition-transform">
+                    <item.icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">{item.role}</h3>
+                    <p className="text-xs text-neutral-400 font-mono">{item.period}</p>
+                  </div>
+                </div>
+
+                <ul className="space-y-3">
+                  {item.desc.map((desc, i) => (
+                    <li key={i} className="text-sm text-neutral-300 flex items-start gap-3">
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+                      {desc}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           ))}
         </div>
-      </div>
+      </TracingBeam>
     </section>
-  );
-}
-
-function TimelineItem({ exp, index }: { exp: any; index: number }) {
-  const isLeft = index % 2 === 0;
-
-  return (
-    <div className={`flex flex-col md:flex-row gap-8 items-center ${isLeft ? "md:flex-row-reverse" : ""}`}>
-      
-      {/* Center Point */}
-      <div className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-black border border-white/20 md:-translate-x-1/2 flex items-center justify-center z-10">
-        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-      </div>
-
-      {/* Content Side */}
-      <div className="ml-12 md:ml-0 md:w-1/2 w-full">
-        <motion.div
-          initial={{ opacity: 0, x: isLeft ? 20 : -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className={`p-6 rounded-xl border border-white/10 bg-neutral-900/50 backdrop-blur-sm hover:border-primary/50 transition-colors duration-300 relative group ${
-            isLeft ? "md:mr-12" : "md:ml-12"
-          }`}
-        >
-          {/* Decorative corners */}
-          <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-
-          <div className="flex items-center gap-2 mb-2">
-            <exp.icon className="w-4 h-4 text-primary" />
-            <span className="text-xs font-mono text-primary/80">{exp.period}</span>
-          </div>
-
-          <h3 className="text-xl font-bold text-white mb-1">{exp.role}</h3>
-          <div className="text-neutral-400 text-sm font-medium mb-4 flex items-center gap-2">
-             <span className="w-1 h-1 rounded-full bg-neutral-600" />
-             {exp.company}
-          </div>
-
-          <ul className="space-y-3">
-            {exp.desc.map((item: string, idx: number) => (
-              <li key={idx} className="text-neutral-400 text-sm leading-relaxed flex items-start gap-2">
-                <span className="mt-1.5 text-primary/50 text-[10px]">➜</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </motion.div>
-      </div>
-
-      {/* Empty Side */}
-      <div className="hidden md:block md:w-1/2" />
-    </div>
   );
 }
 

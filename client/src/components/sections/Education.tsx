@@ -1,60 +1,62 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { GraduationCap, Calendar, Award } from "lucide-react";
+import { Meteors } from "../ui/meteors";
 
 export default function Education() {
   return (
-    <section id="education" className="py-24 bg-black relative overflow-hidden">
+    <section id="education" className="py-24 bg-neutral-950 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
-        <div className="mb-16">
+        <div className="mb-16 text-center">
           <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
             Education
           </h2>
           <p className="text-neutral-400 mt-2">
-            Academic foundation and research.
+            Academic foundation and research milestones.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {education.map((edu, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="group relative p-8 rounded-2xl border border-white/10 bg-neutral-900/30 hover:bg-neutral-900/50 transition-colors"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-primary">
-                    <GraduationCap className="w-6 h-6" />
+            <div key={index} className="relative w-full">
+              <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] bg-red-500 rounded-full blur-3xl opacity-20" />
+              <div className="relative shadow-xl bg-gray-900 border border-gray-800  px-8 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
+                
+                {/* Meteor Effect */}
+                <Meteors number={20} />
+
+                <div className="flex justify-between items-start w-full mb-4 relative z-50">
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-cyan-400">
+                    <GraduationCap className="w-8 h-8" />
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-muted-foreground">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-neutral-400">
                     <Calendar className="w-3 h-3" />
                     {edu.period}
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-2">{edu.degree}</h3>
-                <div className="text-neutral-400 font-medium mb-4">{edu.school}</div>
+                <h3 className="font-bold text-2xl text-white mb-2 relative z-50">
+                  {edu.degree}
+                </h3>
+                <p className="font-medium text-neutral-300 mb-4 relative z-50">
+                  {edu.school}
+                </p>
 
-                <div className="flex items-center gap-2 text-sm text-primary/80 mb-6 bg-primary/10 w-fit px-3 py-1 rounded-full border border-primary/20">
+                <div className="flex items-center gap-2 text-sm text-cyan-300 mb-6 bg-cyan-900/20 w-fit px-3 py-1 rounded-full border border-cyan-500/20 relative z-50">
                   <Award className="w-4 h-4" />
                   GPA: {edu.gpa}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 relative z-50">
                   {edu.details.map((detail, i) => (
-                    <div key={i} className="text-sm text-neutral-500 flex items-start gap-2">
-                      <span className="mt-1.5 w-1 h-1 rounded-full bg-neutral-600" />
+                    <div key={i} className="text-sm text-neutral-400 flex items-start gap-2">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-neutral-500" />
                       {detail}
                     </div>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
