@@ -29,11 +29,15 @@ function App() {
 
 // Use hash-based routing for GitHub Pages
 import { Router } from "wouter";
+import { ReactLenis } from "lenis/react";
+
 export default function AppWithRouter() {
   return (
-    <Router hook={useHashLocation}>
-      <App />
-    </Router>
+    <ReactLenis root>
+      <Router hook={useHashLocation}>
+        <App />
+      </Router>
+    </ReactLenis>
   );
 }
 

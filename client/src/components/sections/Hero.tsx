@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Spotlight } from "@/components/ui/spotlight";
 import StarsCanvas from "@/components/ui/stars-background";
 import { HeroTechCore } from "@/components/ui/3d-shape";
@@ -12,15 +12,20 @@ export default function Hero() {
     }
   };
 
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]); // Parallax for text
+  const y2 = useTransform(scrollY, [0, 500], [0, -150]); // Parallax for 3D element
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]); // Fade out on scroll
+
   return (
     <div className="min-h-screen w-full flex md:items-center md:justify-center bg-black antialiased relative overflow-hidden">
       {/* Dynamic 3D Stars */}
       <StarsCanvas />
 
       {/* 3D Tech Core - Right Side */}
-      <div className="absolute inset-0 z-5">
+      <motion.div style={{ y: y2 }} className="absolute inset-0 z-5">
         <HeroTechCore />
-      </div>
+      </motion.div>
 
       {/* Animated Grid Background */}
       <div className="absolute inset-0 bg-grid-white/[0.02] z-0" />
@@ -43,7 +48,7 @@ export default function Hero() {
         fill="#a855f7"
       />
 
-      <div className="p-4 max-w-7xl mx-auto relative z-10 w-full pt-20 md:pt-0">
+      <motion.div style={{ y: y1, opacity }} className="p-4 max-w-7xl mx-auto relative z-10 w-full pt-20 md:pt-0">
         <div className="flex flex-col items-start justify-center min-h-[80vh] max-w-3xl">
 
           {/* Intro Badge */}
@@ -140,7 +145,7 @@ export default function Hero() {
             </motion.div>
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
