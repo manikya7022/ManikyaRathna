@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { SkillsVisualization } from "../ui/3d-shape";
+import TextReveal from "@/components/ui/TextReveal";
 import { Code2, Brain, Cloud, Database, Sparkles } from "lucide-react";
 
 const skillCategories = [
@@ -56,7 +57,7 @@ export default function Skills() {
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-white to-secondary">
-              Technical Arsenal
+              <TextReveal direction="up" className="inline-block">Technical Arsenal</TextReveal>
             </span>
           </h2>
           <p className="text-neutral-400 max-w-2xl mx-auto text-lg">

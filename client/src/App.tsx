@@ -30,10 +30,12 @@ function App() {
 // Use hash-based routing for GitHub Pages
 import { Router } from "wouter";
 import { ReactLenis } from "lenis/react";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 export default function AppWithRouter() {
   return (
     <ReactLenis root>
+      <ScrollProgress />
       <Router hook={useHashLocation}>
         <App />
       </Router>

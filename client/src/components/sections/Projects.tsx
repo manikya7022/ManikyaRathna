@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import TextReveal from "@/components/ui/TextReveal";
 import {
   Brain,
   Database,
@@ -351,9 +352,11 @@ export default function Projects() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 mb-4">
-            Personal Projects
-          </h2>
+          <div className="mb-4">
+            <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+              <TextReveal direction="up" className="inline-block">Personal Projects</TextReveal>
+            </h2>
+          </div>
           <p className="text-neutral-400 max-w-2xl mx-auto text-lg">
             Explorations in high-dimensional space — from brain-computer interfaces to
             uncertainty-aware AI alignment and biomedical knowledge discovery.
