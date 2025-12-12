@@ -64,17 +64,23 @@ export default function Hero() {
             <span className="text-sm text-neutral-300 font-medium">AI/ML Engineer & Researcher</span>
           </motion.div>
 
-          {/* Main Title - Massive with Gradient */}
+          {/* Main Title - Massive with Animated Gradient */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-8xl font-bold leading-tight pb-4"
           >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60">
+            <span
+              className="bg-clip-text text-transparent bg-[length:200%_auto]"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #ffffff, #06b6d4, #a855f7, #06b6d4, #ffffff)',
+                animation: 'gradient-shift 5s ease infinite, glow-pulse 3s ease-in-out infinite'
+              }}
+            >
               Manikya Rathna
             </span>
-            <span className="text-primary">.</span>
+            <span className="text-primary animate-pulse">.</span>
           </motion.h1>
 
           {/* Animated Subtitle */}

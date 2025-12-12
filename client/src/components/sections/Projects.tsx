@@ -16,7 +16,9 @@ import {
   Shield,
   Users,
   GitBranch,
-  Microscope
+  Microscope,
+  Github,
+  ExternalLink
 } from "lucide-react";
 import { Card3D, Card3DBody, Card3DItem } from "../ui/3d-card";
 import {
@@ -42,6 +44,8 @@ interface ProjectData {
   gradientTo: string;
   ThreeJSComponent: React.ComponentType;
   icon: React.ReactNode;
+  githubUrl?: string;
+  liveUrl?: string;
 }
 
 const projects: ProjectData[] = [
@@ -159,7 +163,8 @@ const projects: ProjectData[] = [
     gradientFrom: "from-green-500/20",
     gradientTo: "to-emerald-600/20",
     ThreeJSComponent: KnowledgeGraphShape,
-    icon: <Database className="h-5 w-5" />
+    icon: <Database className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/KnowledeDiscovery"
   }
 ];
 
@@ -327,11 +332,17 @@ const ProjectCard = ({ project, index }: { project: ProjectData; index: number }
                   </>
                 )}
               </button>
-              <button
-                className="p-2 rounded-full bg-white/5 border border-white/10 text-white hover:text-primary hover:border-primary/50 transition-all"
-              >
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:text-primary hover:border-primary/50 transition-all group/link"
+                >
+                  <Github className="w-4 h-4" />
+                  <span className="text-xs opacity-0 group-hover/link:opacity-100 transition-opacity">View Code</span>
+                </a>
+              )}
             </Card3DItem>
           </div>
         </Card3DBody>

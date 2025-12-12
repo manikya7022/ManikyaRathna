@@ -61,6 +61,37 @@
       opacity: 0;
     }
   }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.4));
+    }
+    50% {
+      filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6));
+    }
+  }
+
+  --animate-gradient-shift: gradient-shift 5s ease infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
 }
 
 :root {
