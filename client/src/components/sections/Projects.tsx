@@ -332,7 +332,7 @@ const ProjectCard = ({ project, index }: { project: ProjectData; index: number }
                   </>
                 )}
               </button>
-              {project.githubUrl && (
+              {project.githubUrl ? (
                 <a
                   href={project.githubUrl}
                   target="_blank"
@@ -342,6 +342,8 @@ const ProjectCard = ({ project, index }: { project: ProjectData; index: number }
                   <Github className="w-4 h-4" />
                   <span className="text-xs opacity-0 group-hover/link:opacity-100 transition-opacity">View Code</span>
                 </a>
+              ) : (
+                <div className="w-8 h-8" />
               )}
             </Card3DItem>
           </div>
