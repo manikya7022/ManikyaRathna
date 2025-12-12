@@ -137,8 +137,8 @@ export default function Education() {
           {[
             { icon: Trophy, value: "3.9+", label: "Graduate GPA" },
             { icon: Award, value: "Top 10%", label: "Class Rank" },
-            { icon: BookOpen, value: "6+", label: "Research Projects" },
-            { icon: Star, value: "3", label: "Publications" },
+            { icon: BookOpen, value: "4+", label: "Research Projects" },
+            { icon: Star, value: "1", label: "Publications" },
           ].map((stat, i) => (
             <div
               key={i}

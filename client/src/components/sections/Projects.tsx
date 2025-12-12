@@ -202,7 +202,7 @@ const ProjectCard = ({ project, index }: { project: ProjectData; index: number }
                   color: project.color
                 }}
               >
-                Graduate Project
+                {project.id === "brain-machine" ? "Undergrad Project" : "Graduate Project"}
               </div>
             </div>
           </Card3DItem>
@@ -358,8 +358,7 @@ export default function Projects() {
             </h2>
           </div>
           <p className="text-neutral-400 max-w-2xl mx-auto text-lg">
-            Explorations in high-dimensional space — from brain-computer interfaces to
-            uncertainty-aware AI alignment and biomedical knowledge discovery.
+            Explorations in high-dimensional space.
           </p>
         </motion.div>
 

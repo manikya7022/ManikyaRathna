@@ -57,7 +57,7 @@ export default function Skills() {
         >
           <h2 className="text-4xl md:text-6xl font-bold mb-4">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-white to-secondary">
-              <TextReveal direction="up" className="inline-block">Technical Arsenal</TextReveal>
+              <TextReveal direction="up" className="inline-block">Technical Skills</TextReveal>
             </span>
           </h2>
           <p className="text-neutral-400 max-w-2xl mx-auto text-lg">
@@ -133,10 +133,10 @@ export default function Skills() {
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
         >
           {[
-            { label: "ML Models Deployed", value: "15+" },
-            { label: "Projects Completed", value: "20+" },
-            { label: "Years Experience", value: "3+" },
-            { label: "Technologies", value: "40+" },
+            { label: "Technologies", value: "12+" },
+            { label: "ML Models Deployed", value: "8+" },
+            { label: "Research Projects", value: "4+" },
+            { label: "Publications", value: "1" },
           ].map((stat, i) => (
             <div
               key={i}
