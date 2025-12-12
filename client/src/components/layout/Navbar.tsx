@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Cpu, Code, Briefcase, User, Mail } from "lucide-react";
+import { Menu, X, Cpu, Code, Briefcase, User, Mail, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Navbar() {
@@ -9,18 +9,39 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
 
+  const [activeSection, setActiveSection] = useState("about");
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.2 } // Trigger when 20% of the section is visible
+    );
+
+    const sections = document.querySelectorAll("section, #about");
+    sections.forEach((section) => observer.observe(section));
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
 
   const navLinks = [
     { name: "About", href: "#about", icon: User },
     { name: "Skills", href: "#skills", icon: Cpu },
     { name: "Experience", href: "#experience", icon: Briefcase },
+    { name: "Education", href: "#education", icon: GraduationCap },
     { name: "Projects", href: "#projects", icon: Code },
     { name: "Contact", href: "#contact", icon: Mail },
   ];
@@ -67,9 +88,21 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => scrollToSection(e, link.href)}
-                className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors rounded-full group overflow-hidden whitespace-nowrap"
+                className={cn(
+                  "relative px-4 py-2 text-sm font-medium transition-colors rounded-full group overflow-hidden whitespace-nowrap",
+                  activeSection === link.href.substring(1)
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-primary"
+                )}
               >
                 <span className="relative z-10">{link.name}</span>
+                {activeSection === link.href.substring(1) && (
+                  <motion.span
+                    layoutId="activeSection"
+                    className="absolute inset-0 bg-primary/10 rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
                 <span className="absolute inset-0 bg-primary/10 scale-0 group-hover:scale-100 transition-transform rounded-full origin-center" />
               </a>
             ))}
@@ -106,7 +139,12 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
-                  className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:text-primary hover:bg-white/5 rounded-xl transition-colors"
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
+                    activeSection === link.href.substring(1)
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-primary hover:bg-white/5"
+                  )}
                 >
                   <link.icon className="w-5 h-5" />
                   {link.name}

@@ -20,7 +20,7 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]); // Fade out on scroll
 
   return (
-    <div className="min-h-screen w-full flex md:items-center md:justify-center bg-black antialiased relative overflow-hidden">
+    <div id="about" className="min-h-screen w-full flex md:items-center md:justify-center bg-black antialiased relative overflow-hidden">
       {/* Dynamic 3D Stars */}
       <StarsCanvas />
 

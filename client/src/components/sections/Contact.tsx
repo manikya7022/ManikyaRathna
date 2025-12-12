@@ -70,25 +70,22 @@ export default function Contact() {
               </div>
 
               {/* Contact Links */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-20">
                 <ContactCard
                   icon={Mail}
                   label="Email"
-                  value="mar805@pitt.edu"
                   href="mailto:mar805@pitt.edu"
                   color="#06b6d4"
                 />
                 <ContactCard
                   icon={Linkedin}
                   label="LinkedIn"
-                  value="Connect"
                   href="https://www.linkedin.com/in/manikya-rathna-098263196/"
                   color="#0077b5"
                 />
                 <ContactCard
                   icon={Github}
                   label="GitHub"
-                  value="View Code"
                   href="https://github.com/manikya7022"
                   color="#ffffff"
                 />
@@ -187,22 +184,22 @@ export default function Contact() {
 function ContactCard({
   icon: Icon,
   label,
-  value,
   href,
   color
 }: {
   icon: any;
   label: string;
-  value: string;
   href: string;
   color: string;
 }) {
+  const isMail = href.startsWith("mailto:");
+
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 group hover:bg-white/10"
+      target={isMail ? undefined : "_blank"}
+      rel={isMail ? undefined : "noopener noreferrer"}
+      className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 group hover:bg-white/10 relative z-20"
     >
       <div
         className="p-3 rounded-lg transition-all duration-300 group-hover:scale-110"
@@ -210,9 +207,8 @@ function ContactCard({
       >
         <Icon className="w-5 h-5" style={{ color }} />
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="text-xs text-neutral-500 uppercase tracking-wider">{label}</div>
-        <div className="text-sm text-white font-medium group-hover:text-primary transition-colors truncate">{value}</div>
+      <div className="flex-1 min-w-0 font-medium text-white group-hover:text-primary transition-colors">
+        {label}
       </div>
       <ArrowUpRight className="w-4 h-4 text-neutral-500 group-hover:text-primary transition-colors" />
     </a>
