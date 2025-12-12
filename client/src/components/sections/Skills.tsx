@@ -135,8 +135,8 @@ export default function Skills() {
           {[
             { label: "Technologies", value: "12+" },
             { label: "ML Models Deployed", value: "8+" },
-            { label: "Research Projects", value: "4+" },
-            { label: "Publications", value: "1" },
+            { label: "Projects Completed", value: "20+" },
+            { label: "Years Experience", value: "3+" },
           ].map((stat, i) => (
             <div
               key={i}
