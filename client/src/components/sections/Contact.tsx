@@ -172,11 +172,7 @@ export default function Contact() {
       </div>
 
       {/* Footer */}
-      <div className="text-center mt-20 pt-8 border-t border-white/5">
-        <p className="text-neutral-500 text-sm">
-          © 2025 Manikya Rathna. Crafted with <span className="text-primary">React</span>, <span className="text-secondary">Three.js</span> & <span className="text-white">Tailwind</span>.
-        </p>
-      </div>
+
     </section>
   );
 }
