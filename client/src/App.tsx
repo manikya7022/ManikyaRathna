@@ -31,10 +31,12 @@ function App() {
 import { Router } from "wouter";
 import { ReactLenis } from "lenis/react";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 export default function AppWithRouter() {
   return (
     <ReactLenis root>
+      <CustomCursor />
       <ScrollProgress />
       <Router hook={useHashLocation}>
         <App />

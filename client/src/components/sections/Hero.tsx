@@ -96,35 +96,11 @@ export default function Hero() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             <p className="relative z-10">
-              Graduate student in <span className="text-white font-medium">Intelligent Systems</span> at the University of Pittsburgh,
-              specializing in machine learning, NLP, and LLM alignment with production experience
-              across healthcare, HR-tech, and industrial automation.
-            </p>
-            <p className="relative z-10">
-              From building <span className="text-primary">uncertainty-aware RLHF</span> frameworks to deploying
-              clinical text mining over <span className="text-white font-medium">135M+ notes</span>, I bring research rigor
-              and real-world engineering impact together.
+              Machine learning engineer and Artificial Intelligence graduate student at the University of Pittsburgh with experience delivering end-to-end ML and NLP solutions in healthcare, tech, and industrial automation. Skilled in building production-grade pipelines for large-scale clinical NLP, recommendation systems, and multi-agent LLM workflows, with a focus on robust engineering, cloud-native deployment, and demonstrable business impact.
             </p>
           </motion.div>
 
-          {/* Stats Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex gap-8 mt-8"
-          >
-            {[
-              { value: "3.9", label: "GPA" },
-              { value: "135M+", label: "Notes Processed" },
-              { value: "94.9%", label: "Model Accuracy" },
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-                <div className="text-xs text-neutral-500 uppercase tracking-wider mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
+
 
           {/* Scroll Indicator */}
           <MagneticButton className="absolute bottom-12 left-1/2 -translate-x-1/2">
