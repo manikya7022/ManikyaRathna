@@ -7,6 +7,7 @@ import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import CustomCursor from "@/components/ui/CustomCursor";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import ScrollToTop from "@/components/ui/ScrollToTop";
 
 
 export default function Home() {
@@ -17,6 +18,9 @@ export default function Home() {
 
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
 
       <div className="bg-noise" />
 

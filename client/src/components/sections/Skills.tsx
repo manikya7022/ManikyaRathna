@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { SkillsVisualization } from "../ui/3d-shape";
 import TextReveal from "@/components/ui/TextReveal";
+import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import { Code2, Brain, Cloud, Database, Sparkles } from "lucide-react";
 
 const skillCategories = [
@@ -108,7 +109,22 @@ export default function Skills() {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={inView ? { opacity: 1, scale: 1 } : {}}
                       transition={{ duration: 0.3, delay: catIndex * 0.1 + index * 0.05 }}
-                      className="px-3 py-1.5 text-xs font-medium rounded-full bg-black/50 border border-white/10 text-neutral-300 hover:text-white hover:border-white/30 transition-all duration-300 cursor-default"
+                      whileHover={{
+                        scale: 1.1,
+                        y: -3,
+                        transition: { type: "spring", stiffness: 400, damping: 10 }
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-3 py-1.5 text-xs font-medium rounded-full bg-black/50 border border-white/10 text-neutral-300 hover:text-white hover:border-white/30 hover:bg-white/10 hover:shadow-lg transition-all duration-300 cursor-pointer select-none"
+                      style={{
+                        boxShadow: "0 0 0 rgba(6, 182, 212, 0)"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 20px ${category.color}40`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = "0 0 0 rgba(6, 182, 212, 0)";
+                      }}
                     >
                       {skill}
                     </motion.span>
@@ -133,18 +149,24 @@ export default function Skills() {
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
         >
           {[
-            { label: "Technologies", value: "12+" },
-            { label: "ML Models Deployed", value: "8+" },
-            { label: "Projects Completed", value: "20+" },
-            { label: "Years Experience", value: "3+" },
+            { label: "Technologies", value: 12, suffix: "+" },
+            { label: "ML Models Deployed", value: 8, suffix: "+" },
+            { label: "Projects Completed", value: 20, suffix: "+" },
+            { label: "Years Experience", value: 3, suffix: "+" },
           ].map((stat, i) => (
-            <div
+            <motion.div
               key={i}
-              className="text-center p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.4, delay: 0.6 + i * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="text-center p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm cursor-default hover:border-primary/30 hover:bg-white/10 transition-all duration-300 group"
             >
-              <div className="text-2xl md:text-3xl font-bold text-primary mb-1">{stat.value}</div>
-              <div className="text-xs text-neutral-500 uppercase tracking-wider">{stat.label}</div>
-            </div>
+              <div className="text-2xl md:text-3xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform">
+                <AnimatedCounter end={stat.value} suffix={stat.suffix} duration={2000} />
+              </div>
+              <div className="text-xs text-neutral-500 uppercase tracking-wider group-hover:text-neutral-400 transition-colors">{stat.label}</div>
+            </motion.div>
           ))}
         </motion.div>
       </div>

@@ -4,6 +4,7 @@ import StarsCanvas from "@/components/ui/stars-background";
 import { HeroTechCore } from "@/components/ui/3d-shape";
 import MagneticButton from "@/components/ui/MagneticButton";
 import TextReveal from "@/components/ui/TextReveal";
+import TypingEffect from "@/components/ui/TypingEffect";
 import { ArrowDown, Sparkles } from "lucide-react";
 
 export default function Hero() {
@@ -61,7 +62,13 @@ export default function Hero() {
             className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-neutral-300 font-medium">AI/ML Engineer & Researcher</span>
+            <TypingEffect
+              words={["AI/ML Engineer", "NLP Researcher", "Full-Stack Developer", "Deep Learning Enthusiast"]}
+              typingSpeed={80}
+              deletingSpeed={40}
+              pauseDuration={2500}
+              className="text-sm text-neutral-300 font-medium"
+            />
           </motion.div>
 
           {/* Main Title - Massive with Animated Gradient */}
