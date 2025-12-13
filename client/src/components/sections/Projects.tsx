@@ -18,7 +18,10 @@ import {
   GitBranch,
   Microscope,
   Github,
-  ExternalLink
+  ExternalLink,
+  CheckCircle,
+  AlertTriangle,
+  Mic
 } from "lucide-react";
 import { Card3D, Card3DBody, Card3DItem } from "../ui/3d-card";
 import {
@@ -134,7 +137,7 @@ const projects: ProjectData[] = [
     gradientFrom: "from-purple-500/20",
     gradientTo: "to-violet-600/20",
     ThreeJSComponent: AlignmentShape,
-    icon: <Network className="h-5 w-5" />
+    icon: <Lock className="h-5 w-5" />
   },
   {
     id: "biomedical-kg",
@@ -165,8 +168,120 @@ const projects: ProjectData[] = [
     ThreeJSComponent: KnowledgeGraphShape,
     icon: <Database className="h-5 w-5" />,
     githubUrl: "https://github.com/manikya7022/KnowledeDiscovery"
+  },
+  {
+    id: "neuro-symbolic",
+    title: "Neuro-Symbolic Fact-Checker",
+    subtitle: "GraphRAG for Hallucination Prevention",
+    description: "A Graph Retrieval Augmented Generation system combining LLMs with Knowledge Graphs for real-time fact verification and AI hallucination prevention.",
+    highlights: [
+      {
+        metric: "Triple Extraction",
+        description: "Converts unstructured text into (Subject → Predicate → Object) knowledge triples via LLM",
+        icon: <CheckCircle className="w-4 h-4" />
+      },
+      {
+        metric: "NL→Cypher Query",
+        description: "Natural language to graph database queries with context-aware entity resolution",
+        icon: <Database className="w-4 h-4" />
+      },
+      {
+        metric: "Guardrail Verify",
+        description: "Catches contradictions against graph evidence and generates corrections with explanations",
+        icon: <AlertTriangle className="w-4 h-4" />
+      }
+    ],
+    technologies: ["FastAPI", "Neo4j", "NetworkX", "Ollama", "LangChain", "D3.js", "Cypher"],
+    color: "#3b82f6",
+    gradientFrom: "from-blue-500/20",
+    gradientTo: "to-indigo-600/20",
+    ThreeJSComponent: AlignmentShape,
+    icon: <CheckCircle className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/Neuro-Symbolic"
+  },
+  {
+    id: "meeting-assistant",
+    title: "Meeting Intelligence Assistant",
+    subtitle: "Privacy-First Local Transcription & AI",
+    description: "A real-time meeting transcription and AI-powered analysis system running entirely on local machine with no cloud dependencies using Whisper and Ollama.",
+    highlights: [
+      {
+        metric: "Silero VAD",
+        description: "Deep learning Voice Activity Detection with energy-based fallback and 1.5s silence detection",
+        icon: <Cpu className="w-4 h-4" />
+      },
+      {
+        metric: "30s Ring Buffer",
+        description: "Circular audio buffer for continuous capture with overlap handling and streaming support",
+        icon: <BarChart3 className="w-4 h-4" />
+      },
+      {
+        metric: "RAG Q&A",
+        description: "Keyword-based retrieval over JSONL meeting history for context-aware answers",
+        icon: <Zap className="w-4 h-4" />
+      }
+    ],
+    technologies: ["faster-whisper", "Silero VAD", "Ollama", "PyAudio", "WebSockets", "Docker"],
+    color: "#ec4899",
+    gradientFrom: "from-pink-500/20",
+    gradientTo: "to-rose-600/20",
+    ThreeJSComponent: NeuralNetworkShape,
+    icon: <Mic className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/MeetingAssistance"
   }
 ];
+
+// Static header with animated icon - no WebGL for project cards
+const StaticProjectHeader = ({ project }: { project: ProjectData }) => {
+  return (
+    <Card3DItem translateZ="60" className="relative z-10">
+      <div
+        className={`w-full h-48 rounded-t-xl overflow-hidden relative bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} border-b border-white/5`}
+      >
+        <div className="absolute inset-0 bg-grid-white/[0.05]" />
+
+        {/* Animated Icon */}
+        <div className="w-full h-full flex items-center justify-center">
+          <motion.div
+            animate={{
+              scale: [1, 1.05, 1],
+              rotate: [0, 3, -3, 0]
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="p-10 rounded-full"
+            style={{
+              backgroundColor: `${project.color}15`,
+              boxShadow: `0 0 80px ${project.color}30, inset 0 0 30px ${project.color}10`
+            }}
+          >
+            <div
+              style={{ color: project.color }}
+              className="scale-[4] opacity-80"
+            >
+              {project.icon}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Project Type Badge */}
+        <div
+          className="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-mono border backdrop-blur-md"
+          style={{
+            borderColor: `${project.color}50`,
+            backgroundColor: `${project.color}15`,
+            color: project.color
+          }}
+        >
+          {project.id === "brain-machine" ? "Undergrad Project" : "Graduate Project"}
+        </div>
+      </div>
+    </Card3DItem>
+  );
+};
 
 const ProjectCard = ({ project, index }: { project: ProjectData; index: number }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -189,28 +304,8 @@ const ProjectCard = ({ project, index }: { project: ProjectData; index: number }
             className={`absolute inset-0 bg-gradient-to-br ${project.gradientFrom} via-transparent ${project.gradientTo} opacity-0 group-hover/card:opacity-100 transition-opacity duration-500`}
           />
 
-          {/* 3D Visualization Header */}
-          <Card3DItem translateZ="60" className="relative z-10">
-            <div
-              className={`w-full h-48 rounded-t-xl overflow-hidden relative bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} border-b border-white/5`}
-            >
-              <div className="absolute inset-0 bg-grid-white/[0.05]" />
-              <div className="w-full h-full">
-                <ThreeJS />
-              </div>
-              {/* Project Type Badge */}
-              <div
-                className="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-mono border backdrop-blur-md"
-                style={{
-                  borderColor: `${project.color}50`,
-                  backgroundColor: `${project.color}15`,
-                  color: project.color
-                }}
-              >
-                {project.id === "brain-machine" ? "Undergrad Project" : "Graduate Project"}
-              </div>
-            </div>
-          </Card3DItem>
+          {/* Static Icon Header - no WebGL for performance */}
+          <StaticProjectHeader project={project} />
 
           <div className="p-6 flex flex-col flex-grow relative z-10">
             {/* Title Section */}
