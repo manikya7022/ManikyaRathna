@@ -367,7 +367,7 @@ const getCardStyle = (index: number, activeIndex: number, total: number) => {
   }
 
   const scale = absDiff === 0 ? 1 : absDiff === 1 ? 0.85 : 0.7;
-  const xOffset = diff * 360; // Increased spacing for wider active card
+  const xOffset = diff * 400; // Increased spacing for wider active card
   const zOffset = absDiff === 0 ? 50 : absDiff === 1 ? -30 : -80;
   const rotateY = absDiff === 0 ? 0 : diff > 0 ? -8 : 8;
   const opacity = absDiff === 0 ? 1 : absDiff === 1 ? 0.7 : 0.4;
@@ -405,7 +405,7 @@ const ProjectCard = ({
         border border-white/10 rounded-2xl overflow-hidden
         transition-all duration-500 ease-out
         ${isActive ? 'border-white/30 shadow-2xl' : ''}
-        ${isExpanded ? 'w-[480px]' : isActive ? 'w-[420px]' : 'w-[380px]'}
+        ${isExpanded ? 'w-[540px]' : isActive ? 'w-[480px]' : 'w-[420px]'}
       `}
       style={{
         boxShadow: isActive
@@ -499,17 +499,17 @@ const ProjectCard = ({
           ))}
         </div>
 
-        {/* Expandable Details - with max-height and scroll */}
-        <AnimatePresence>
+        {/* Expandable Details */}
+        <AnimatePresence mode="wait">
           {isExpanded && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <div className="max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+              <div className="pt-2">
                 <p className="text-sm text-neutral-400 leading-relaxed mb-4">
                   {project.description}
                 </p>
@@ -521,7 +521,7 @@ const ProjectCard = ({
                       className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5"
                     >
                       <div
-                        className="p-1.5 rounded-md mt-0.5"
+                        className="p-1.5 rounded-md mt-0.5 shrink-0"
                         style={{
                           backgroundColor: `${project.color}20`,
                           color: project.color
@@ -719,7 +719,7 @@ export default function Projects() {
         {/* Carousel Container */}
         <div
           ref={containerRef}
-          className="relative h-[700px] flex items-center justify-center"
+          className="relative h-[850px] flex items-center justify-center"
           style={{ perspective: "1200px" }}
         >
           {/* Cards */}
