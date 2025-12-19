@@ -339,7 +339,7 @@ const projects: ProjectData[] = [
 ];
 
 // Calculate card transform with infinite/continuous effect
-const getCardStyle = (index: number, activeIndex: number, total: number) => {
+const getCardStyle = (index: number, activeIndex: number, total: number, isMobile: boolean = false) => {
   // Calculate the shortest distance considering wrap-around
   let diff = index - activeIndex;
 
@@ -351,6 +351,20 @@ const getCardStyle = (index: number, activeIndex: number, total: number) => {
   }
 
   const absDiff = Math.abs(diff);
+
+  // On mobile, only show active card
+  if (isMobile && absDiff > 0) {
+    return {
+      scale: 0.7,
+      x: diff > 0 ? 500 : -500,
+      z: -100,
+      rotateY: 0,
+      opacity: 0,
+      blur: 5,
+      zIndex: 0,
+      visible: false
+    };
+  }
 
   // Only show cards within 2 positions (for performance)
   if (absDiff > 2) {
@@ -405,7 +419,7 @@ const ProjectCard = ({
         border border-white/10 rounded-2xl overflow-hidden
         transition-all duration-500 ease-out
         ${isActive ? 'border-white/30 shadow-2xl' : ''}
-        ${isExpanded ? 'w-[540px]' : isActive ? 'w-[480px]' : 'w-[420px]'}
+        ${isExpanded ? 'w-[calc(100vw-2rem)] md:w-[540px]' : isActive ? 'w-[calc(100vw-2rem)] md:w-[480px]' : 'w-[calc(100vw-4rem)] md:w-[420px]'}
       `}
       style={{
         boxShadow: isActive
@@ -565,19 +579,20 @@ const ProjectCard = ({
           <button
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               onToggleExpand();
             }}
-            className="flex items-center gap-2 text-xs text-neutral-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-400 hover:text-white transition-colors rounded-lg hover:bg-white/5 relative z-10"
           >
             {isExpanded ? (
               <>
                 <ChevronUp className="w-4 h-4" />
-                Show Less
+                <span>Show Less</span>
               </>
             ) : (
               <>
                 <ChevronDown className="w-4 h-4" />
-                View Details
+                <span>View Details</span>
               </>
             )}
           </button>
@@ -606,8 +621,20 @@ export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Detect mobile screen
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Check if any card has details expanded
   const isDetailsExpanded = expandedIndex !== null;
@@ -719,13 +746,13 @@ export default function Projects() {
         {/* Carousel Container */}
         <div
           ref={containerRef}
-          className="relative h-[850px] flex items-center justify-center"
+          className="relative h-[600px] md:h-[850px] flex items-center justify-center overflow-hidden"
           style={{ perspective: "1200px" }}
         >
           {/* Cards */}
           <div className="relative flex items-center justify-center">
             {projects.map((project, index) => {
-              const style = getCardStyle(index, activeIndex, projects.length);
+              const style = getCardStyle(index, activeIndex, projects.length, isMobile);
 
               // Skip rendering cards that are not visible
               if (!style.visible) return null;
