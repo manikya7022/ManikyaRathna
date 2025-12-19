@@ -5,7 +5,7 @@ import Experience from "@/components/sections/Experience";
 import Education from "@/components/sections/Education";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
-import CustomCursor from "@/components/ui/CustomCursor";
+
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 
@@ -13,8 +13,7 @@ import ScrollToTop from "@/components/ui/ScrollToTop";
 export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Premium Custom Cursor */}
-      <CustomCursor />
+
 
       {/* Scroll Progress Indicator */}
       <ScrollProgress />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TextReveal from "@/components/ui/TextReveal";
 import {
@@ -6,9 +6,9 @@ import {
   Database,
   Search,
   Lock,
-  Network,
   Cpu,
-  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
   ChevronDown,
   ChevronUp,
   Zap,
@@ -21,15 +21,13 @@ import {
   ExternalLink,
   CheckCircle,
   AlertTriangle,
-  Mic
+  Mic,
+  Network,
+  Code,
+  Layers,
+  Activity,
+  Orbit
 } from "lucide-react";
-import { Card3D, Card3DBody, Card3DItem } from "../ui/3d-card";
-import {
-  NeuralNetworkShape,
-  KnowledgeGraphShape,
-  DataSearchShape,
-  AlignmentShape
-} from "../ui/3d-shape";
 
 interface ProjectData {
   id: string;
@@ -45,7 +43,6 @@ interface ProjectData {
   color: string;
   gradientFrom: string;
   gradientTo: string;
-  ThreeJSComponent: React.ComponentType;
   icon: React.ReactNode;
   githubUrl?: string;
   liveUrl?: string;
@@ -78,8 +75,7 @@ const projects: ProjectData[] = [
     color: "#f59e0b",
     gradientFrom: "from-amber-500/20",
     gradientTo: "to-orange-600/20",
-    ThreeJSComponent: DataSearchShape,
-    icon: <Search className="h-5 w-5" />
+    icon: <Code className="h-5 w-5" />
   },
   {
     id: "brain-machine",
@@ -107,7 +103,6 @@ const projects: ProjectData[] = [
     color: "#06b6d4",
     gradientFrom: "from-cyan-500/20",
     gradientTo: "to-blue-600/20",
-    ThreeJSComponent: NeuralNetworkShape,
     icon: <Brain className="h-5 w-5" />
   },
   {
@@ -136,7 +131,6 @@ const projects: ProjectData[] = [
     color: "#a855f7",
     gradientFrom: "from-purple-500/20",
     gradientTo: "to-violet-600/20",
-    ThreeJSComponent: AlignmentShape,
     icon: <Lock className="h-5 w-5" />
   },
   {
@@ -165,7 +159,6 @@ const projects: ProjectData[] = [
     color: "#22c55e",
     gradientFrom: "from-green-500/20",
     gradientTo: "to-emerald-600/20",
-    ThreeJSComponent: KnowledgeGraphShape,
     icon: <Database className="h-5 w-5" />,
     githubUrl: "https://github.com/manikya7022/KnowledeDiscovery"
   },
@@ -195,7 +188,6 @@ const projects: ProjectData[] = [
     color: "#3b82f6",
     gradientFrom: "from-blue-500/20",
     gradientTo: "to-indigo-600/20",
-    ThreeJSComponent: AlignmentShape,
     icon: <CheckCircle className="h-5 w-5" />,
     githubUrl: "https://github.com/manikya7022/Neuro-Symbolic"
   },
@@ -225,49 +217,239 @@ const projects: ProjectData[] = [
     color: "#ec4899",
     gradientFrom: "from-pink-500/20",
     gradientTo: "to-rose-600/20",
-    ThreeJSComponent: NeuralNetworkShape,
     icon: <Mic className="h-5 w-5" />,
     githubUrl: "https://github.com/manikya7022/MeetingAssistance"
+  },
+  {
+    id: "gossip-rl",
+    title: "Gossip-Based Distributed RL",
+    subtitle: "Decentralized Multi-Agent Training System",
+    description: "A distributed reinforcement learning system enabling multi-agent training without a central parameter server. Agents share gradients using a gossip protocol with push-pull hybrid for fast convergence, ensuring scalability and fault tolerance.",
+    highlights: [
+      {
+        metric: "50 Agents",
+        description: "Scaled to 50 concurrent agents sharing gradients via gossip protocol with 5,961 episodes and 65 gossip rounds",
+        icon: <Users className="w-4 h-4" />
+      },
+      {
+        metric: "10μs Latency",
+        description: "High-performance zero-copy C++ RPC transport layer with intra-node latency under 10 microseconds",
+        icon: <Zap className="w-4 h-4" />
+      },
+      {
+        metric: "ε-δ Privacy",
+        description: "Built-in differential privacy with Gaussian mechanism, Rényi DP accounting, and adaptive noise calibration",
+        icon: <Shield className="w-4 h-4" />
+      }
+    ],
+    technologies: ["PPO", "Gossip Protocol", "Differential Privacy", "C++ RPC", "SWIM Detection", "Prometheus"],
+    color: "#f97316",
+    gradientFrom: "from-orange-500/20",
+    gradientTo: "to-red-600/20",
+    icon: <Network className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/Gossip-Based-Distributed-RL-Training-System"
+  },
+  {
+    id: "rag-uq",
+    title: "RAG + Uncertainty Quantification",
+    subtitle: "Learned Retrieval & Bayesian Calibration",
+    description: "A research implementation combining differentiable retrieval gating with Bayesian uncertainty calibration for RAG. Features a learned MLP router that dynamically weights BM25 vs. dense retrieval scores per passage.",
+    highlights: [
+      {
+        metric: "Hybrid Retrieval",
+        description: "Differentiable gating network that dynamically fuses BM25 (sparse) and ChromaDB (dense) retrieval per passage",
+        icon: <Search className="w-4 h-4" />
+      },
+      {
+        metric: "MC Dropout",
+        description: "Bayesian confidence calibration using Monte Carlo Dropout for uncertainty quantification in predictions",
+        icon: <BarChart3 className="w-4 h-4" />
+      },
+      {
+        metric: "Conformal UQ",
+        description: "Conformal Prediction for calibrated confidence intervals with theoretical coverage guarantees",
+        icon: <Shield className="w-4 h-4" />
+      }
+    ],
+    technologies: ["ChromaDB", "BM25", "MC Dropout", "Conformal Prediction", "Ollama", "Docker"],
+    color: "#8b5cf6",
+    gradientFrom: "from-violet-500/20",
+    gradientTo: "to-purple-600/20",
+    icon: <Layers className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/Efficient-RAG-with-Learned-Retrieval-and-Uncertainty-Quantification"
+  },
+  {
+    id: "self-healing-ml",
+    title: "Self-Healing ML Pipeline",
+    subtitle: "Formally Verified Autonomous Recovery",
+    description: "A verified self-healing ML pipeline integrating Z3 SMT solver for compile-time invariant verification with eBPF monitoring and PPO reinforcement learning for autonomous runtime healing with proven safety properties.",
+    highlights: [
+      {
+        metric: "18 Invariants",
+        description: "Z3-verified data invariants with <100ms verification time per constraint and automatic counterexample detection",
+        icon: <CheckCircle className="w-4 h-4" />
+      },
+      {
+        metric: "2s Recovery",
+        description: "Autonomous failure detection and service restoration within 2 seconds via PPO-based healing agent",
+        icon: <Zap className="w-4 h-4" />
+      },
+      {
+        metric: "eBPF Monitor",
+        description: "Low-overhead kernel-level monitoring capturing CPU, memory, I/O latency and application health signals",
+        icon: <Activity className="w-4 h-4" />
+      }
+    ],
+    technologies: ["Z3 SMT Solver", "eBPF", "PPO", "Dagster", "gVisor", "FastAPI"],
+    color: "#14b8a6",
+    gradientFrom: "from-teal-500/20",
+    gradientTo: "to-cyan-600/20",
+    icon: <Activity className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/Formally-Verified-Self-Healing-ML-Pipeline"
+  },
+  {
+    id: "hyperbolic-bo",
+    title: "HyperbolicBO",
+    subtitle: "Ultrametric Bayesian Optimization",
+    description: "Bayesian Optimization using hyperbolic geometry to represent tree-structured search spaces. Configurations are embedded in the Poincaré ball model where distances are computed using hyperbolic metric for lower distortion.",
+    highlights: [
+      {
+        metric: "Poincaré Ball",
+        description: "Hyperbolic geometry operations including Möbius addition, exponential/logarithmic maps in unit ball",
+        icon: <Orbit className="w-4 h-4" />
+      },
+      {
+        metric: "39 Tests",
+        description: "Comprehensive test suite covering GP regression, hyperbolic kernels, and acquisition functions",
+        icon: <CheckCircle className="w-4 h-4" />
+      },
+      {
+        metric: "NAS-Bench-201",
+        description: "Neural Architecture Search benchmark integration with Thompson Sampling and Expected Improvement",
+        icon: <GitBranch className="w-4 h-4" />
+      }
+    ],
+    technologies: ["Gaussian Process", "Poincaré Ball", "Thompson Sampling", "NAS-Bench-201", "REST API", "PyTorch"],
+    color: "#e11d48",
+    gradientFrom: "from-rose-500/20",
+    gradientTo: "to-pink-600/20",
+    icon: <Orbit className="h-5 w-5" />,
+    githubUrl: "https://github.com/manikya7022/HyperbolicBO---Ultrametric-Bayesian-Optimization"
   }
 ];
 
-// Static header with animated icon - no WebGL for project cards
-const StaticProjectHeader = ({ project }: { project: ProjectData }) => {
+// Calculate card transform with infinite/continuous effect
+const getCardStyle = (index: number, activeIndex: number, total: number) => {
+  // Calculate the shortest distance considering wrap-around
+  let diff = index - activeIndex;
+
+  // Wrap around for continuous effect
+  if (diff > total / 2) {
+    diff = diff - total;
+  } else if (diff < -total / 2) {
+    diff = diff + total;
+  }
+
+  const absDiff = Math.abs(diff);
+
+  // Only show cards within 2 positions (for performance)
+  if (absDiff > 2) {
+    return {
+      scale: 0.6,
+      x: diff > 0 ? 1000 : -1000,
+      z: -150,
+      rotateY: 0,
+      opacity: 0,
+      blur: 5,
+      zIndex: 0,
+      visible: false
+    };
+  }
+
+  const scale = absDiff === 0 ? 1 : absDiff === 1 ? 0.85 : 0.7;
+  const xOffset = diff * 360; // Increased spacing for wider active card
+  const zOffset = absDiff === 0 ? 50 : absDiff === 1 ? -30 : -80;
+  const rotateY = absDiff === 0 ? 0 : diff > 0 ? -8 : 8;
+  const opacity = absDiff === 0 ? 1 : absDiff === 1 ? 0.7 : 0.4;
+  const blur = absDiff === 0 ? 0 : absDiff === 1 ? 1 : 3;
+
+  return {
+    scale,
+    x: xOffset,
+    z: zOffset,
+    rotateY,
+    opacity,
+    blur,
+    zIndex: total - absDiff,
+    visible: true
+  };
+};
+
+// Project Card Component with View Details button
+const ProjectCard = ({
+  project,
+  isActive,
+  isExpanded,
+  onToggleExpand
+}: {
+  project: ProjectData;
+  isActive: boolean;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+}) => {
   return (
-    <Card3DItem translateZ="60" className="relative z-10">
+    <div
+      className={`
+        relative
+        bg-neutral-900/80 backdrop-blur-xl 
+        border border-white/10 rounded-2xl overflow-hidden
+        transition-all duration-500 ease-out
+        ${isActive ? 'border-white/30 shadow-2xl' : ''}
+        ${isExpanded ? 'w-[480px]' : isActive ? 'w-[420px]' : 'w-[380px]'}
+      `}
+      style={{
+        boxShadow: isActive
+          ? `0 25px 80px -20px ${project.color}40, 0 0 60px -30px ${project.color}30`
+          : 'none'
+      }}
+    >
+      {/* Gradient Header */}
       <div
-        className={`w-full h-48 rounded-t-xl overflow-hidden relative bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} border-b border-white/5`}
+        className={`relative h-44 bg-gradient-to-br ${project.gradientFrom} ${project.gradientTo} overflow-hidden`}
       >
         <div className="absolute inset-0 bg-grid-white/[0.05]" />
 
-        {/* Animated Icon */}
-        <div className="w-full h-full flex items-center justify-center">
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            background: [
+              `radial-gradient(circle at 30% 50%, ${project.color}20 0%, transparent 50%)`,
+              `radial-gradient(circle at 70% 50%, ${project.color}20 0%, transparent 50%)`,
+              `radial-gradient(circle at 30% 50%, ${project.color}20 0%, transparent 50%)`
+            ]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
-            animate={{
-              scale: [1, 1.05, 1],
-              rotate: [0, 3, -3, 0]
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="p-10 rounded-full"
+            animate={isActive ? {
+              scale: [1, 1.1, 1],
+              rotate: [0, 5, -5, 0]
+            } : {}}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="p-8 rounded-full"
             style={{
               backgroundColor: `${project.color}15`,
-              boxShadow: `0 0 80px ${project.color}30, inset 0 0 30px ${project.color}10`
+              boxShadow: `0 0 60px ${project.color}30, inset 0 0 30px ${project.color}10`
             }}
           >
-            <div
-              style={{ color: project.color }}
-              className="scale-[4] opacity-80"
-            >
+            <div style={{ color: project.color }} className="scale-[3.5]">
               {project.icon}
             </div>
           </motion.div>
         </div>
 
-        {/* Project Type Badge */}
         <div
           className="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-mono border backdrop-blur-md"
           style={{
@@ -276,181 +458,247 @@ const StaticProjectHeader = ({ project }: { project: ProjectData }) => {
             color: project.color
           }}
         >
-          {project.id === "brain-machine" ? "Undergrad Project" : "Graduate Project"}
+          {project.id === "brain-machine" ? "Undergrad" : "Graduate"}
         </div>
       </div>
-    </Card3DItem>
-  );
-};
 
-const ProjectCard = ({ project, index }: { project: ProjectData; index: number }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const ThreeJS = project.ThreeJSComponent;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      viewport={{ once: true }}
-      className={index < 2 ? "md:col-span-1" : "md:col-span-1"}
-    >
-      <Card3D className="h-full w-full">
-        <Card3DBody
-          className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 hover:border-white/20 h-full flex flex-col group/card relative overflow-hidden rounded-2xl"
-        >
-          {/* Hover Gradient */}
+      {/* Content */}
+      <div className="p-6">
+        {/* Title */}
+        <div className="flex items-start gap-3 mb-3">
           <div
-            className={`absolute inset-0 bg-gradient-to-br ${project.gradientFrom} via-transparent ${project.gradientTo} opacity-0 group-hover/card:opacity-100 transition-opacity duration-500`}
-          />
-
-          {/* Static Icon Header - no WebGL for performance */}
-          <StaticProjectHeader project={project} />
-
-          <div className="p-6 flex flex-col flex-grow relative z-10">
-            {/* Title Section */}
-            <Card3DItem translateZ="50" className="flex items-start gap-3 mb-3">
-              <div
-                className="p-2.5 rounded-xl border"
-                style={{
-                  backgroundColor: `${project.color}15`,
-                  borderColor: `${project.color}30`,
-                  color: project.color
-                }}
-              >
-                {project.icon}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-white group-hover/card:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-neutral-400 mt-0.5">{project.subtitle}</p>
-              </div>
-            </Card3DItem>
-
-            {/* Description */}
-            <Card3DItem translateZ="30" className="mb-4">
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                {project.description}
-              </p>
-            </Card3DItem>
-
-            {/* Key Metrics - Always Visible */}
-            <Card3DItem translateZ="25" className="mb-4">
-              <div className="grid grid-cols-3 gap-2">
-                {project.highlights.map((highlight, i) => (
-                  <div
-                    key={i}
-                    className="text-center p-2 rounded-lg bg-white/5 border border-white/5 hover:border-white/10 transition-colors"
-                  >
-                    <div
-                      className="text-xs font-bold mb-1"
-                      style={{ color: project.color }}
-                    >
-                      {highlight.metric}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card3DItem>
-
-            {/* Expandable Details */}
-            <AnimatePresence>
-              {isExpanded && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
-                >
-                  <div className="space-y-3 mb-4">
-                    {project.highlights.map((highlight, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5"
-                      >
-                        <div
-                          className="p-1.5 rounded-md mt-0.5"
-                          style={{
-                            backgroundColor: `${project.color}20`,
-                            color: project.color
-                          }}
-                        >
-                          {highlight.icon}
-                        </div>
-                        <div>
-                          <div
-                            className="text-xs font-semibold mb-1"
-                            style={{ color: project.color }}
-                          >
-                            {highlight.metric}
-                          </div>
-                          <p className="text-xs text-neutral-400 leading-relaxed">
-                            {highlight.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.technologies.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-neutral-400 border border-white/5"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Footer */}
-            <Card3DItem translateZ="20" className="mt-auto pt-4 flex justify-between items-center">
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="flex items-center gap-2 text-xs text-neutral-400 hover:text-white transition-colors"
-              >
-                {isExpanded ? (
-                  <>
-                    <ChevronUp className="w-4 h-4" />
-                    Show Less
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="w-4 h-4" />
-                    View Details
-                  </>
-                )}
-              </button>
-              {project.githubUrl ? (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:text-primary hover:border-primary/50 transition-all group/link"
-                >
-                  <Github className="w-4 h-4" />
-                  <span className="text-xs opacity-0 group-hover/link:opacity-100 transition-opacity">View Code</span>
-                </a>
-              ) : (
-                <div className="w-8 h-8" />
-              )}
-            </Card3DItem>
+            className="p-2 rounded-xl border"
+            style={{
+              backgroundColor: `${project.color}15`,
+              borderColor: `${project.color}30`,
+              color: project.color
+            }}
+          >
+            {project.icon}
           </div>
-        </Card3DBody>
-      </Card3D>
-    </motion.div>
+          <div>
+            <h3 className="text-lg font-bold text-white">{project.title}</h3>
+            <p className="text-xs text-neutral-400">{project.subtitle}</p>
+          </div>
+        </div>
+
+        {/* Key Metrics - Always Visible */}
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          {project.highlights.map((highlight, i) => (
+            <div
+              key={i}
+              className="text-center p-2 rounded-lg bg-white/5 border border-white/5 hover:border-white/10 transition-colors"
+            >
+              <div
+                className="text-xs font-bold"
+                style={{ color: project.color }}
+              >
+                {highlight.metric}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Expandable Details - with max-height and scroll */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                <p className="text-sm text-neutral-400 leading-relaxed mb-4">
+                  {project.description}
+                </p>
+
+                <div className="space-y-3 mb-4">
+                  {project.highlights.map((highlight, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5"
+                    >
+                      <div
+                        className="p-1.5 rounded-md mt-0.5"
+                        style={{
+                          backgroundColor: `${project.color}20`,
+                          color: project.color
+                        }}
+                      >
+                        {highlight.icon}
+                      </div>
+                      <div>
+                        <div
+                          className="text-xs font-semibold mb-1"
+                          style={{ color: project.color }}
+                        >
+                          {highlight.metric}
+                        </div>
+                        <p className="text-xs text-neutral-400 leading-relaxed">
+                          {highlight.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Technologies */}
+                <div className="flex flex-wrap gap-1.5">
+                  {project.technologies.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-neutral-400 border border-white/5"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Footer with View Details button */}
+        <div className="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleExpand();
+            }}
+            className="flex items-center gap-2 text-xs text-neutral-400 hover:text-white transition-colors"
+          >
+            {isExpanded ? (
+              <>
+                <ChevronUp className="w-4 h-4" />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4" />
+                View Details
+              </>
+            )}
+          </button>
+
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 p-2 rounded-full bg-white/5 border border-white/10 text-white hover:text-primary hover:border-primary/50 transition-all group/link"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Github className="w-4 h-4" />
+              <span className="text-xs opacity-0 group-hover/link:opacity-100 transition-opacity">View Code</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
+
+const INACTIVITY_TIMEOUT = 20000; // 20 seconds
 
 export default function Projects() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Check if any card has details expanded
+  const isDetailsExpanded = expandedIndex !== null;
+
+  // Reset inactivity timer
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+
+    if (isDetailsExpanded) return;
+
+    inactivityTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, INACTIVITY_TIMEOUT);
+  }, [isDetailsExpanded]);
+
+  // Auto-scroll effect
+  useEffect(() => {
+    if (isPaused || isDetailsExpanded) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % projects.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isPaused, isDetailsExpanded]);
+
+  // Cleanup inactivity timer on unmount
+  useEffect(() => {
+    return () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Restart auto-scroll when Projects section comes into view
+  useEffect(() => {
+    const section = document.getElementById('projects');
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+            // Restart auto-scroll when scrolling to projects section
+            setExpandedIndex(null);
+            setIsPaused(false);
+          }
+        });
+      },
+      { threshold: [0.3, 0.5] }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // Handle navigation - pause, collapse details, and start inactivity timer
+  const handleNavigation = (newIndex: number) => {
+    setIsPaused(true);
+    setExpandedIndex(null); // Collapse any expanded details
+    setActiveIndex(newIndex);
+    resetInactivityTimer();
+  };
+
+  const goToPrev = () => {
+    handleNavigation((activeIndex - 1 + projects.length) % projects.length);
+  };
+
+  const goToNext = () => {
+    handleNavigation((activeIndex + 1) % projects.length);
+  };
+
+  // Handle expand/collapse details
+  const toggleExpand = (index: number) => {
+    if (expandedIndex === index) {
+      setExpandedIndex(null);
+      resetInactivityTimer();
+    } else {
+      setExpandedIndex(index);
+      setIsPaused(true);
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    }
+  };
+
   return (
-    <section id="projects" className="py-24 bg-black relative z-20">
+    <section id="projects" className="py-24 bg-black relative z-20 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div
@@ -460,21 +708,91 @@ export default function Projects() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <div className="mb-4">
-            <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-              <TextReveal direction="up" className="inline-block">Personal Projects</TextReveal>
-            </h2>
-          </div>
+          <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 mb-4">
+            <TextReveal direction="up" className="inline-block">Personal Projects</TextReveal>
+          </h2>
           <p className="text-neutral-400 max-w-2xl mx-auto text-lg">
             Explorations in high-dimensional space.
           </p>
         </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
-          ))}
+        {/* Carousel Container */}
+        <div
+          ref={containerRef}
+          className="relative h-[700px] flex items-center justify-center"
+          style={{ perspective: "1200px" }}
+        >
+          {/* Cards */}
+          <div className="relative flex items-center justify-center">
+            {projects.map((project, index) => {
+              const style = getCardStyle(index, activeIndex, projects.length);
+
+              // Skip rendering cards that are not visible
+              if (!style.visible) return null;
+
+              return (
+                <motion.div
+                  key={project.id}
+                  className="absolute"
+                  animate={{
+                    x: style.x,
+                    scale: style.scale,
+                    rotateY: style.rotateY,
+                    opacity: style.opacity,
+                    z: style.z
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30
+                  }}
+                  style={{
+                    zIndex: style.zIndex,
+                    filter: style.blur > 0 ? `blur(${style.blur}px)` : 'none',
+                    transformStyle: "preserve-3d"
+                  }}
+                >
+                  <ProjectCard
+                    project={project}
+                    isActive={index === activeIndex}
+                    isExpanded={expandedIndex === index}
+                    onToggleExpand={() => toggleExpand(index)}
+                  />
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={goToPrev}
+            className="absolute left-4 md:left-12 z-50 p-3 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all backdrop-blur-md"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          <button
+            onClick={goToNext}
+            className="absolute right-4 md:right-12 z-50 p-3 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all backdrop-blur-md"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Dot Indicators */}
+        <div className="flex justify-center mt-8">
+          <div className="flex items-center gap-2">
+            {projects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleNavigation(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${index === activeIndex
+                  ? 'w-8 bg-primary'
+                  : 'bg-white/20 hover:bg-white/40'
+                  }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

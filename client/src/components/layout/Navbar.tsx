@@ -16,15 +16,34 @@ export default function Navbar() {
       setScrolled(window.scrollY > 50);
     };
 
+    // Track visibility ratios for all sections
+    const sectionVisibility = new Map<string, number>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+          sectionVisibility.set(entry.target.id, entry.intersectionRatio);
+        });
+
+        // Find the section with the highest visibility
+        let maxRatio = 0;
+        let mostVisibleSection = activeSection;
+
+        sectionVisibility.forEach((ratio, id) => {
+          if (ratio > maxRatio) {
+            maxRatio = ratio;
+            mostVisibleSection = id;
           }
         });
+
+        if (maxRatio > 0.1) {
+          setActiveSection(mostVisibleSection);
+        }
       },
-      { threshold: 0.2 } // Trigger when 20% of the section is visible
+      {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+        rootMargin: "-80px 0px -20% 0px" // Account for fixed navbar
+      }
     );
 
     const sections = document.querySelectorAll("section, #about");
