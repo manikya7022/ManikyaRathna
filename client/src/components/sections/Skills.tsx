@@ -10,25 +10,25 @@ const skillCategories = [
     title: "Languages",
     icon: Code2,
     color: "#06b6d4",
-    skills: ["Python", "Java", "TypeScript", "JavaScript", "SQL", "R", "React", "HTML/CSS"],
+    skills: ["Python", "Java", "TypeScript", "JavaScript", "SQL", "C++", "R", "React", "HTML/CSS"],
   },
   {
     title: "AI & NLP",
     icon: Brain,
     color: "#a855f7",
-    skills: ["Hugging Face", "QLora", "PEFT", "DPO", "Fine-tuning", "Transformers", "LangChain", "Azure OpenAI"],
+    skills: ["Hugging Face", "QLora", "PEFT", "DPO", "RLHF", "Fine-tuning", "Transformers", "LangChain", "Azure OpenAI", "Ollama", "RAG"],
   },
   {
     title: "Deep Learning",
     icon: Sparkles,
     color: "#22c55e",
-    skills: ["TensorFlow", "Keras", "PyTorch", "BERT", "AWS SageMaker", "Computer Vision", "RLHF"],
+    skills: ["TensorFlow", "Keras", "PyTorch", "BERT", "XGBoost", "Random Forest", "Computer Vision", "PPO", "Gaussian Process"],
   },
   {
     title: "Tools & Cloud",
     icon: Cloud,
     color: "#f59e0b",
-    skills: ["AWS (EC2, Glue, Lambda)", "PostgreSQL", "Git", "Docker", "Spark", "Flask", "FastAPI"],
+    skills: ["AWS (EC2, SageMaker, Lambda, Glue)", "PostgreSQL", "Neo4j", "ChromaDB", "Elasticsearch", "Git", "Docker", "PySpark", "Flask", "FastAPI"],
   },
 ];
 

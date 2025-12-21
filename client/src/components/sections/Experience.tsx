@@ -136,7 +136,7 @@ const experiences = [
   {
     role: "AI Engineer Intern",
     company: "Northbridge",
-    location: "San Francisco, CA (Remote)",
+    location: "Pittsburgh, PA (Remote)",
     period: "Nov 2025 – Present",
     icon: Cloud,
     color: "#06b6d4",
