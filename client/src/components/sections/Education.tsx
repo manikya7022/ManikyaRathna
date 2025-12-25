@@ -160,7 +160,7 @@ const education = [
     school: "University of Pittsburgh",
     degree: "Master of Science in Intelligent Systems",
     period: "Aug 2024 – Apr 2026",
-    gpa: "3.917/4.0",
+    gpa: "3.944/4.0",
     color: "#06b6d4",
     secondaryColor: "#22c55e",
     details: [
